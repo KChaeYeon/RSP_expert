@@ -1,0 +1,82 @@
+/* RSP_expert — Mobile Enhancement
+   이론 페이지(01_theory/, 02_paper/)에 공통 적용
+   각 파일 <head> 마지막에 <link rel="stylesheet" href="../mobile.css"> 추가
+*/
+
+/* ── 600px 이하 ── */
+@media (max-width: 640px) {
+  body { font-size: 14px !important; }
+
+  /* 히어로 영역 */
+  .hero { padding: 22px 16px 18px !important; }
+  .hero h1 { font-size: 1.45rem !important; line-height: 1.3 !important; }
+  .hero p { font-size: 0.88rem !important; }
+  .badge { font-size: 0.72rem !important; padding: 3px 10px !important; }
+
+  /* 내비게이션 바 — 가로 스크롤 */
+  .nav-bar {
+    padding: 8px 12px !important;
+    gap: 6px 12px !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+  .nav-bar::-webkit-scrollbar { display: none; }
+  .nav-bar a { white-space: nowrap !important; font-size: 0.78rem !important; }
+
+  /* 컨테이너 & 섹션 */
+  .container { padding: 16px 12px !important; }
+  .section { padding: 18px 14px !important; margin-bottom: 18px !important; }
+  .section-title { font-size: 1.08rem !important; }
+
+  /* 표 — 가로 스크롤 */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    font-size: 0.82rem !important;
+  }
+  th, td { padding: 8px 10px !important; }
+
+  /* 그리드 → 단일 열 */
+  .grid-2, .grid-3, .two-col,
+  [class*="grid-"] { grid-template-columns: 1fr !important; }
+
+  /* 카드 */
+  .card { padding: 14px !important; }
+  .card h4 { font-size: 0.88rem !important; }
+
+  /* 강조 박스 */
+  .highlight-box, .warning-box, .key-box {
+    padding: 12px 14px !important;
+    font-size: 0.88rem !important;
+  }
+
+  /* SVG 다이어그램 — 가로 스크롤 */
+  .diagram-container {
+    padding: 14px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .diagram-container svg { min-width: 420px; }
+
+  /* step-flow */
+  .step-flow { gap: 6px !important; }
+  .step { min-width: 100px !important; font-size: 0.82rem !important; padding: 8px 12px !important; }
+
+  /* 제목 */
+  h1 { font-size: 1.45rem !important; }
+  h2 { font-size: 1.18rem !important; }
+  h3 { font-size: 1.02rem !important; }
+  p, li { font-size: 0.9rem !important; line-height: 1.7 !important; }
+}
+
+/* ── 380px 이하 초소형 ── */
+@media (max-width: 380px) {
+  .hero h1 { font-size: 1.25rem !important; }
+  .nav-bar a { font-size: 0.72rem !important; }
+  .section-title { font-size: 1rem !important; }
+  .container { padding: 12px 10px !important; }
+}

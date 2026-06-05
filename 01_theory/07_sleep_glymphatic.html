@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>수면과 글림패틱 시스템 | RSP_PET</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --accent:#7c5cbf; --blue:#4f9cf9; --green:#3ecf8e; --orange:#f5a623; --red:#e05c5c; --text:#e8eaf0; --text2:#9ba3b8; --border:#2e3452; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; font-size:15px; line-height:1.75; }
+  .hero { background:linear-gradient(135deg,#1a237e 0%,#311b92 50%,#0d47a1 100%); padding:50px 40px 40px; }
+  .hero h1 { font-size:2.1rem; font-weight:700; margin-bottom:8px; }
+  .hero p { color:rgba(255,255,255,0.75); max-width:700px; }
+  .badge { display:inline-block; background:rgba(124,92,191,0.2); border:1px solid var(--accent); color:var(--accent); border-radius:20px; padding:3px 12px; font-size:0.78rem; margin-bottom:16px; }
+  .nav-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; gap:20px; flex-wrap:wrap; }
+  .nav-bar a { color:var(--text2); text-decoration:none; font-size:0.85rem; }
+  .nav-bar a:hover { color:var(--accent); }
+  .nav-bar a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 24px; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:28px; }
+  .section-title { font-size:1.3rem; font-weight:700; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .highlight-box { background:rgba(124,92,191,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .warning-box { background:rgba(224,92,92,0.08); border-left:4px solid var(--red); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .key-box { background:rgba(62,207,142,0.08); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0; }
+  .card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .card h4 { color:var(--orange); font-size:0.95rem; margin-bottom:10px; }
+  .diagram-container { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:24px; margin:20px 0; text-align:center; }
+  .diagram-label { font-size:0.82rem; color:var(--text2); margin-top:12px; font-style:italic; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .ref { font-size:0.78rem; color:var(--text2); margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+  .ref a { color:var(--blue); text-decoration:none; }
+  @media(max-width:768px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+<div class="hero">
+  <div class="badge">📚 이론 | Theory · 07</div>
+  <h1>💤 수면과 글림패틱 시스템</h1>
+  <p>왜 뇌 청소는 주로 잠자는 동안 일어나는가? — 수면 구조, 호흡, 뇌 청소의 연결 고리</p>
+</div>
+<div class="nav-bar">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="02_csf_basics.html">② CSF 기초</a>
+  <a href="03_respiration_csf_mechanism.html">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="07_sleep_glymphatic.html" class="active">⑦ 수면-글림패틱</a>
+  <a href="08_aqp4_astrocytes.html">⑧ AQP4</a>
+  <a href="09_brain_aging.html">⑨ 뇌 노화</a>
+  <a href="10_blood_biomarkers.html">⑩ 바이오마커</a>
+  <a href="11_autonomic_hrv.html">⑪ 자율신경</a>
+  <a href="../02_paper/paper_index.html">📄 논문</a>
+</div>
+<div class="container">
+
+  <div class="key-box"><strong>🎯 핵심 요약:</strong> 수면, 특히 NREM 서파수면(SWS) 중에 글림패틱 시스템이 각성 상태보다 약 2배 더 활발하게 작동한다. 수면 중 느리고 깊은 복식호흡 패턴, 혈관운동의 규칙적 동기화, 뇌 세포외 공간 확장이 동시에 일어나며 뇌 청소 효율을 극대화한다. 본 연구에서 mobiCARE 웨어러블이 측정하는 수면 구조와 HRV는 이 야간 글림패틱 활성화의 직접 지표다.</div>
+
+  <!-- 수면 구조 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🌙</span> 1. 수면 구조와 글림패틱 기능의 관계</div>
+    <div class="diagram-container">
+      <svg viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+        <rect width="680" height="200" fill="#1a1d27" rx="8"/>
+        <text x="340" y="22" fill="#9ba3b8" font-size="11" text-anchor="middle">전형적 야간 수면 구조 (Hypnogram)와 글림패틱 활성도</text>
+        <!-- Y축 -->
+        <line x1="60" y1="40" x2="60" y2="155" stroke="var(--border)" stroke-width="1"/>
+        <text x="55" y="50" fill="#9ba3b8" font-size="9" text-anchor="end">각성</text>
+        <text x="55" y="75" fill="#9ba3b8" font-size="9" text-anchor="end">N1</text>
+        <text x="55" y="100" fill="#9ba3b8" font-size="9" text-anchor="end">N2</text>
+        <text x="55" y="125" fill="#9ba3b8" font-size="9" text-anchor="end">SWS</text>
+        <text x="55" y="150" fill="#9ba3b8" font-size="9" text-anchor="end">REM</text>
+        <!-- X축 -->
+        <line x1="60" y1="155" x2="640" y2="155" stroke="var(--border)" stroke-width="1"/>
+        <text x="130" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">22:00</text>
+        <text x="240" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">00:00</text>
+        <text x="370" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">02:00</text>
+        <text x="490" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">04:00</text>
+        <text x="610" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">06:00</text>
+        <!-- 수면 파형 -->
+        <polyline points="60,50 90,75 120,75 150,100 160,100 170,125 210,125 240,100 260,75 280,150 310,150 330,125 360,125 390,100 410,150 440,150 460,125 490,100 510,150 540,150 570,100 600,75 630,50" stroke="#7c5cbf" stroke-width="2.5" fill="none"/>
+        <!-- SWS 강조 영역 -->
+        <rect x="170" y="120" width="70" height="35" fill="rgba(62,207,142,0.2)" rx="0"/>
+        <rect x="330" y="120" width="60" height="35" fill="rgba(62,207,142,0.2)" rx="0"/>
+        <rect x="460" y="120" width="30" height="35" fill="rgba(62,207,142,0.15)" rx="0"/>
+        <text x="205" y="114" fill="#3ecf8e" font-size="8" text-anchor="middle">🧹 최고 글림패틱</text>
+        <!-- REM 영역 -->
+        <rect x="280" y="145" width="30" height="10" fill="rgba(79,156,249,0.2)"/>
+        <rect x="410" y="145" width="30" height="10" fill="rgba(79,156,249,0.2)"/>
+        <rect x="510" y="145" width="30" height="10" fill="rgba(79,156,249,0.2)"/>
+        <text x="350" y="185" fill="#3ecf8e" font-size="9" text-anchor="middle">SWS(서파수면) = 글림패틱 최활성 (호흡 느리고 깊음)</text>
+      </svg>
+      <p class="diagram-label">그림 1. 야간 수면 구조. 이른 밤 NREM 서파수면(SWS)이 집중되며 이때 글림패틱 활성이 가장 높다.</p>
+    </div>
+
+    <table>
+      <tr><th>수면 단계</th><th>특성</th><th>글림패틱 활성</th><th>호흡 패턴</th></tr>
+      <tr><td><strong>NREM 1,2 (얕은 수면)</strong></td><td>졸음, 방추파</td><td>중간</td><td>각성보다 느리고 규칙적</td></tr>
+      <tr><td><strong>NREM 3 (SWS, 서파수면)</strong></td><td>δ파(0.5-4Hz) 지배</td><td><strong>최고 (~2배 증가)</strong></td><td>느리고 깊은 복식호흡</td></tr>
+      <tr><td><strong>REM 수면</strong></td><td>꿈, 안구운동, 근육이완</td><td>낮음~중간</td><td>불규칙, 빠름</td></tr>
+      <tr><td>각성 상태</td><td>-</td><td>기준 (낮음)</td><td>다양, 주로 얕음</td></tr>
+    </table>
+  </div>
+
+  <!-- SWS에서의 메커니즘 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚙️</span> 2. SWS에서 글림패틱이 활발한 3가지 이유</div>
+    <div class="grid-3">
+      <div class="card" style="border-color:var(--green);">
+        <h4 style="color:var(--green);">① 세포외 공간 확장</h4>
+        <p>각성 시: 뇌세포 외 공간 = 뇌 부피의 ~14%. NREM 수면 시: ~23%로 확장. 이 공간 확대로 CSF와 ISF의 이동이 훨씬 수월해짐. (Xie et al., Science 2013)</p>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <h4 style="color:var(--accent);">② 혈관운동 동기화</h4>
+        <p>SWS 중 뇌 소동맥의 느린 혈관운동(&lt;0.1Hz)이 서파(slow oscillation)와 동기화 → 규칙적인 CSF 펌핑 효과. Helakari et al. (2022): NREM 중 vasomotion 강도 유의미하게 증가.</p>
+      </div>
+      <div class="card" style="border-color:var(--orange);">
+        <h4 style="color:var(--orange);">③ 복식호흡 패턴</h4>
+        <p>SWS 중 호흡이 느리고 깊어짐 → 호흡 구동 CSF 이동 최대화 (Burman &amp; Alperin 2023). 이것이 수면 중 뇌 독소 청소 효율이 높은 핵심 이유.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>💡 mobiCARE 웨어러블의 역할:</strong> 수면 중 호흡 패턴, HRV, 수면 단계를 7일간 연속 측정 → 석문호흡 전문가군의 수면 중 복식호흡 깊이와 서파수면 비율이 대조군보다 높은지 확인. 이 데이터가 PC-MRI CSF 유량 지표와 상관 분석 시 "야간 글림패틱 활성화"의 핵심 증거가 된다.
+    </div>
+  </div>
+
+  <!-- 수면 장애와 아밀로이드 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚠️</span> 3. 수면 장애 → 아밀로이드 축적 → AD 위험 증가</div>
+    <div class="warning-box">
+      <strong>악순환 고리 (Vicious Cycle):</strong><br>
+      수면 장애 → 글림패틱 기능 저하 → 아밀로이드 축적 → 수면 조절 뉴런 손상 → 수면 장애 악화 → 더 많은 아밀로이드 축적 → ... (AD 가속화)
+    </div>
+    <table>
+      <tr><th>연구</th><th>핵심 발견</th></tr>
+      <tr><td>Wafford (2021)</td><td>SWS 감소 시 Aβ와 tau의 뇌 내 축적 유의미하게 증가. 수면 개선이 신경퇴행 지연의 핵심 전략.</td></tr>
+      <tr><td>Reiter et al. (2023)</td><td>CSF 멜라토닌 리듬이 글림패틱 기능과 수면에 동시 관여. 노화 시 멜라토닌 저하 = 이중 손실.</td></tr>
+      <tr><td>Burman &amp; Alperin (2023)</td><td>수면 장애 시 CSF-to-blood 독소 청소는 감소하지만, brain-to-CSF 이동은 유지됨 → 독소가 CSF에 축적.</td></tr>
+    </table>
+  </div>
+
+  <!-- 석문호흡과 수면 연결 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔗</span> 4. 석문호흡 → 수면 질 개선 → 글림패틱 개선 경로</div>
+    <div class="key-box">
+      <strong>가설 경로:</strong><br><br>
+      석문호흡 훈련 → ① 낮 시간 자율신경 조절 개선 (HRV ↑) → ② 수면 입면 용이, 서파수면 비율 ↑ → ③ 수면 중 느린 복식호흡 패턴 → ④ 야간 글림패틱 활성 극대화 → ⑤ 아밀로이드·타우 청소 효율 ↑ → ⑥ 아밀로이드 축적 감소(Florbetaben PET↓) + 대사 보존(FDG PET↑) + 인지 보호
+    </div>
+    <p>mobiCARE 데이터에서 확인할 핵심 변수:</p>
+    <ul style="padding-left:20px; margin-top:8px; font-size:0.88rem;">
+      <li>SWS 비율 (%) — 석문호흡군 vs 대조군</li>
+      <li>수면 중 호흡 속도 (회/분) 및 호흡 변동성</li>
+      <li>야간 HRV (RMSSD, LF/HF ratio)</li>
+      <li>수면 효율 (sleep efficiency) 및 총 수면 시간</li>
+      <li>미주신경 지수 — 자율신경 균형 지표</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="icon">📑</span> 핵심 참고문헌</div>
+    <div class="ref">
+      <p>Based on articles retrieved from PubMed:</p><br>
+      <p>1. Helakari H, et al. <strong>Human NREM Sleep Promotes Brain-Wide Vasomotor and Respiratory Pulsations.</strong> <em>J Neurosci.</em> 2022;42(12):2503-2515. <a href="https://doi.org/10.1523/JNEUROSCI.0934-21.2022" target="_blank">DOI: 10.1523/JNEUROSCI.0934-21.2022</a></p><br>
+      <p>2. Wafford KA. <strong>Aberrant waste disposal in neurodegeneration: why improved sleep could be the solution.</strong> <em>Cereb Circ Cogn Behav.</em> 2021;2:100025. <a href="https://doi.org/10.1016/j.cccb.2021.100025" target="_blank">DOI: 10.1016/j.cccb.2021.100025</a></p><br>
+      <p>3. Reiter RJ, et al. <strong>Brain washing and neural health: role of age, sleep, and the cerebrospinal fluid melatonin rhythm.</strong> <em>Cell Mol Life Sci.</em> 2023;80(4):88. <a href="https://doi.org/10.1007/s00018-023-04736-5" target="_blank">DOI: 10.1007/s00018-023-04736-5</a></p><br>
+      <p>4. Burman R, Alperin N. <strong>CSF-to-blood toxins clearance is modulated by breathing through cranio-spinal CSF oscillation.</strong> <em>J Sleep Res.</em> 2023;33(1):e14029. <a href="https://doi.org/10.1111/jsr.14029" target="_blank">DOI: 10.1111/jsr.14029</a></p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

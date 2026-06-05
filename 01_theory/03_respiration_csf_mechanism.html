@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>호흡과 CSF 흐름 메커니즘 | RSP_PET 이론 정리</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --accent:#4f9cf9; --accent2:#7c5cbf; --green:#3ecf8e; --orange:#f5a623; --red:#e05c5c; --text:#e8eaf0; --text2:#9ba3b8; --border:#2e3452; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; font-size:15px; line-height:1.75; }
+  .hero { background:linear-gradient(135deg,#1b5e20 0%,#0d47a1 60%,#4a148c 100%); padding:50px 40px 40px; position:relative; overflow:hidden; }
+  .hero h1 { font-size:2.1rem; font-weight:700; margin-bottom:8px; }
+  .hero p { color:rgba(255,255,255,0.75); max-width:700px; }
+  .badge { display:inline-block; background:rgba(62,207,142,0.2); border:1px solid var(--green); color:var(--green); border-radius:20px; padding:3px 12px; font-size:0.78rem; margin-bottom:16px; }
+  .nav-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; gap:20px; flex-wrap:wrap; }
+  .nav-bar a { color:var(--text2); text-decoration:none; font-size:0.85rem; transition:color .2s; }
+  .nav-bar a:hover { color:var(--accent); }
+  .nav-bar a.active { color:var(--green); font-weight:600; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 24px; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:28px; }
+  .section-title { font-size:1.3rem; font-weight:700; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .highlight-box { background:rgba(79,156,249,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .warning-box { background:rgba(245,166,35,0.08); border-left:4px solid var(--orange); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .key-box { background:rgba(62,207,142,0.08); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .star-box { background:rgba(124,92,191,0.1); border:1.5px solid var(--accent2); border-radius:10px; padding:20px; margin:20px 0; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0; }
+  .card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .card h4 { color:var(--orange); font-size:0.95rem; margin-bottom:10px; }
+  .diagram-container { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:24px; margin:20px 0; text-align:center; }
+  .diagram-label { font-size:0.82rem; color:var(--text2); margin-top:12px; font-style:italic; }
+  .step-flow { display:flex; align-items:stretch; gap:0; flex-wrap:wrap; margin:20px 0; }
+  .step { background:var(--surface2); border:1px solid var(--accent); padding:14px 12px; font-size:0.83rem; text-align:center; flex:1; min-width:100px; position:relative; }
+  .step:not(:last-child)::after { content:'→'; position:absolute; right:-12px; top:50%; transform:translateY(-50%); color:var(--accent); font-size:1.2rem; z-index:1; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .ref { font-size:0.78rem; color:var(--text2); margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+  .ref a { color:var(--accent); text-decoration:none; }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media(max-width:768px) { .grid-2,.two-col { grid-template-columns:1fr; } .step-flow { flex-direction:column; } .step:not(:last-child)::after { content:'↓'; right:auto; left:50%; top:auto; bottom:-12px; transform:translateX(-50%); } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">📚 이론 | Theory · 03</div>
+  <h1>🌬️ 호흡과 CSF 흐름 — 구체적 메커니즘</h1>
+  <p>왜 심호흡이 뇌 청소를 촉진하는가? 생리학적 경로 완전 해설 + Lim et al. 2025 핵심 결과</p>
+</div>
+
+<div class="nav-bar">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="02_csf_basics.html">② CSF 기초</a>
+  <a href="03_respiration_csf_mechanism.html" class="active">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="07_sleep_glymphatic.html">⑦ 수면-글림패틱</a>
+  <a href="08_aqp4_astrocytes.html">⑧ AQP4/성상교세포</a>
+  <a href="09_brain_aging.html">⑨ 뇌 노화</a>
+  <a href="10_blood_biomarkers.html">⑩ 혈액 바이오마커</a>
+  <a href="11_autonomic_hrv.html">⑪ 자율신경/HRV</a>
+  <a href="../02_paper/paper_index.html">📄 논문 정리</a>
+</div>
+
+<div class="container">
+
+  <!-- 핵심 요약 -->
+  <div class="star-box">
+    <strong>⭐ 본 연구(Lim et al., Nat Commun 2025)의 핵심 발견:</strong><br>
+    석문호흡 훈련자는 평상시 일반 호흡 중에도 대조군보다 CSF 평균속도, 변위(displacement), 순방향 유량(net flow)이 유의미하게 높았다. 이는 단순히 "지금 심호흡을 하기 때문"이 아니라, <strong>장기 훈련으로 인한 생리적 리모델링(Trait)의 증거</strong>일 수 있다. 이 발견이 본 연구(RSP_PET)가 해결해야 할 State vs. Trait 논쟁의 출발점이다.
+  </div>
+
+  <!-- 1. 호흡의 생리학 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🫁</span> 1. 호흡의 기본 생리학 — 흉강과 복강의 압력 변화</div>
+
+    <p>호흡은 단순히 산소를 넣고 이산화탄소를 내보내는 것이 아니다. 호흡 동작 자체가 흉강(thoracic cavity)의 압력을 주기적으로 변화시키고, 이 압력 변화가 심장 박출량, 정맥 귀환, 혈관 내 혈액량을 조절한다.</p>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+        <rect width="700" height="320" fill="#1a1d27" rx="8"/>
+
+        <!-- 흡기 -->
+        <rect x="20" y="40" width="300" height="260" rx="10" fill="rgba(62,207,142,0.05)" stroke="#3ecf8e" stroke-width="1.5"/>
+        <text x="170" y="65" fill="#3ecf8e" font-size="13" text-anchor="middle" font-weight="bold">흡기 (Inspiration)</text>
+
+        <!-- 횡격막 내려감 -->
+        <ellipse cx="170" cy="200" rx="110" ry="25" fill="rgba(245,166,35,0.3)" stroke="#f5a623" stroke-width="2"/>
+        <text x="170" y="204" fill="#f5a623" font-size="10" text-anchor="middle">횡격막 (내려감 ↓)</text>
+
+        <!-- 흉강 압력 -->
+        <rect x="50" y="90" width="240" height="90" rx="8" fill="rgba(79,156,249,0.1)" stroke="none"/>
+        <text x="170" y="112" fill="#4f9cf9" font-size="10" text-anchor="middle">흉강 내압 ↓ (음압 증가)</text>
+        <text x="170" y="128" fill="#9ba3b8" font-size="9" text-anchor="middle">-5 → -10 cmH₂O</text>
+        <text x="170" y="148" fill="#4f9cf9" font-size="10" text-anchor="middle">폐 확장 → 산소 유입</text>
+        <text x="170" y="164" fill="#4f9cf9" font-size="10" text-anchor="middle">정맥 귀환(venous return) ↑</text>
+
+        <!-- 복강 압력 -->
+        <text x="170" y="240" fill="#f5a623" font-size="10" text-anchor="middle">복강 내압 ↑</text>
+        <text x="170" y="255" fill="#9ba3b8" font-size="9" text-anchor="middle">복부 정맥 압박</text>
+
+        <!-- 화살표 -->
+        <text x="170" y="290" fill="#3ecf8e" font-size="9" text-anchor="middle">→ 경막외 정맥총(epidural venous plexus) 압박</text>
+
+        <!-- 호기 -->
+        <rect x="380" y="40" width="300" height="260" rx="10" fill="rgba(224,92,92,0.05)" stroke="#e05c5c" stroke-width="1.5"/>
+        <text x="530" y="65" fill="#e05c5c" font-size="13" text-anchor="middle" font-weight="bold">호기 (Expiration)</text>
+
+        <!-- 횡격막 올라감 -->
+        <ellipse cx="530" cy="175" rx="110" ry="25" fill="rgba(245,166,35,0.3)" stroke="#f5a623" stroke-width="2"/>
+        <text x="530" y="179" fill="#f5a623" font-size="10" text-anchor="middle">횡격막 (올라감 ↑)</text>
+
+        <!-- 흉강 압력 -->
+        <rect x="410" y="90" width="240" height="90" rx="8" fill="rgba(224,92,92,0.1)" stroke="none"/>
+        <text x="530" y="112" fill="#e05c5c" font-size="10" text-anchor="middle">흉강 내압 ↑ (양압 증가)</text>
+        <text x="530" y="128" fill="#9ba3b8" font-size="9" text-anchor="middle">-5 → -2 cmH₂O</text>
+        <text x="530" y="148" fill="#e05c5c" font-size="10" text-anchor="middle">폐 수축 → CO₂ 배출</text>
+        <text x="530" y="164" fill="#e05c5c" font-size="10" text-anchor="middle">정맥 귀환 ↓</text>
+
+        <!-- 복강 압력 -->
+        <text x="530" y="222" fill="#f5a623" font-size="10" text-anchor="middle">복강 내압 ↓</text>
+        <text x="530" y="237" fill="#9ba3b8" font-size="9" text-anchor="middle">복부 정맥 압박 해제</text>
+
+        <text x="530" y="290" fill="#e05c5c" font-size="9" text-anchor="middle">→ 척수 정맥 귀환 경로 열림</text>
+      </svg>
+      <p class="diagram-label">그림 1. 흡기와 호기 시 흉강 및 복강 압력 변화. 복식호흡(횡격막 호흡)일수록 이 압력 변화의 폭이 커진다.</p>
+    </div>
+  </div>
+
+  <!-- 2. 두 가지 메커니즘 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔄</span> 2. 호흡이 CSF 흐름을 만드는 두 가지 경로</div>
+
+    <p>Lim et al. (2025) 논문은 호흡이 CSF를 이동시키는 경로를 <strong>두 가지</strong>로 구분하고, 이를 실험적으로 분리했다:</p>
+
+    <div class="grid-2">
+      <div class="card" style="border-color: var(--accent);">
+        <h4 style="color: var(--accent);">① 기계적 경로 (Mechanical Pathway)</h4>
+        <p style="font-weight:600; color:var(--text); margin-bottom:8px;">흡기 시 정맥 귀환 촉진을 통한 CSF 이동</p>
+        <div class="step-flow" style="flex-direction:column; gap:4px;">
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">흡기 → 흉강 내압 감소</div>
+          <div style="color:var(--accent); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">내경정맥(IJV) 등 목 정맥의 혈액이 심장으로 빠르게 귀환</div>
+          <div style="color:var(--accent); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">두개 내 정맥혈 감소 → 두개 내 혈액 용적 감소</div>
+          <div style="color:var(--accent); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem; border-color:var(--accent);">척수에서 두개 방향으로 CSF 유입 ↑ (foramen magnum)</div>
+        </div>
+        <p style="margin-top: 12px; font-size:0.82rem; color:var(--text2);">※ Lim et al.이 측정한 foramen magnum과 lateral ventricle 모두에서 관찰됨</p>
+      </div>
+
+      <div class="card" style="border-color: var(--accent2);">
+        <h4 style="color: var(--accent2);">② 자율신경 경로 (Autonomic Pathway)</h4>
+        <p style="font-weight:600; color:var(--text); margin-bottom:8px;">호흡에 의한 심박수 조절 → 뇌혈류 변화</p>
+        <div class="step-flow" style="flex-direction:column; gap:4px;">
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">느린 심호흡 → 미주신경(Vagal) 활성화</div>
+          <div style="color:var(--accent2); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">호흡성 동성부정맥(RSA) 심화</div>
+          <div style="color:var(--accent2); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem;">흡기 시 심박수 ↑ → 뇌혈류 맥동 변화</div>
+          <div style="color:var(--accent2); text-align:center; font-size:1.1rem;">↓</div>
+          <div style="background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 12px; font-size:0.82rem; border-color:var(--accent2);">뇌혈액량(CBV) 변화 → CSF 변위 발생</div>
+        </div>
+        <p style="margin-top: 12px; font-size:0.82rem; color:var(--text2);">※ 특히 foramen magnum에서 이 경로가 추가로 기여함</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>📊 Lim et al. 2025 정량 결과:</strong>
+      <ul style="margin-top:8px; padding-left:20px;">
+        <li>심호흡 시 foramen magnum에서 CSF 변위: 평균 <strong>46% 증가</strong></li>
+        <li>기계적 효과(정맥 귀환) vs 자율신경 효과의 기여 비율: lateral ventricle에서는 기계적 효과가 지배적, foramen magnum에서는 두 경로 모두 기여</li>
+        <li>흡기 길이(inhale length)와 횡격막 이동 거리(diaphragm displacement)가 CSF 이동과 가장 강한 상관관계</li>
+        <li>석문호흡 훈련자는 <strong>평상시 호흡 중에도</strong> 대조군보다 CSF 평균속도·변위·순방향 유량 ↑</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. 복식호흡 vs 흉식호흡 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚖️</span> 3. 복식호흡 vs 흉식호흡 — CSF 이동 효율 차이</div>
+
+    <table>
+      <tr>
+        <th>비교 항목</th>
+        <th>복식호흡 (Diaphragmatic/Abdominal)</th>
+        <th>흉식호흡 (Thoracic/Chest)</th>
+      </tr>
+      <tr>
+        <td>주된 근육</td>
+        <td>횡격막(diaphragm) 중심</td>
+        <td>늑간근, 흉근 중심</td>
+      </tr>
+      <tr>
+        <td>1회 호흡량 (Tidal volume)</td>
+        <td>크다 (~600–800mL)</td>
+        <td>작다 (~400–500mL)</td>
+      </tr>
+      <tr>
+        <td>횡격막 이동 거리</td>
+        <td>크다 (3–6 cm)</td>
+        <td>작다 (~1–2 cm)</td>
+      </tr>
+      <tr>
+        <td>흉강 내압 변화폭</td>
+        <td>크다</td>
+        <td>작다</td>
+      </tr>
+      <tr>
+        <td>정맥 귀환 효율</td>
+        <td>높다</td>
+        <td>낮다</td>
+      </tr>
+      <tr>
+        <td><strong>CSF 변위 증가율</strong></td>
+        <td><strong>~56% 증가 (Burman &amp; Alperin, 2023)</strong></td>
+        <td>기준값</td>
+      </tr>
+      <tr>
+        <td>자율신경 효과</td>
+        <td>미주신경 활성, HRV ↑</td>
+        <td>상대적으로 교감신경 우세</td>
+      </tr>
+    </table>
+
+    <div class="key-box">
+      <strong>🎯 석문호흡(Seokmun Hoheup)과의 연관성:</strong> 석문호흡은 "하단전 중심의 복식호흡"이다. 즉, 횡격막을 최대한 하강시키고 복부를 팽창시키는 방식이다. 이는 위의 표에서 "복식호흡"에 해당하며, CSF 이동 효율 증가에 이상적인 호흡 패턴이다.
+    </div>
+  </div>
+
+  <!-- 4. Burman & Alperin 2023 상세 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📋</span> 4. 핵심 선행 연구 상세 — Burman &amp; Alperin (2023)</div>
+
+    <div class="card" style="border-color:var(--green);">
+      <p style="font-size:0.95rem;"><strong>논문:</strong> "CSF-to-blood toxins clearance is modulated by breathing through cranio-spinal CSF oscillation" <em>J Sleep Res.</em> 2023;33(1):e14029</p>
+      <p style="font-size:0.82rem; color:var(--text2); margin:4px 0 12px;">Burman R &amp; Alperin N | <a href="https://doi.org/10.1111/jsr.14029" target="_blank" style="color:var(--accent);">DOI: 10.1111/jsr.14029</a></p>
+    </div>
+
+    <div class="two-col" style="margin-top:16px;">
+      <div>
+        <p><strong>연구 방법:</strong></p>
+        <ul style="margin-top:8px; padding-left:20px; font-size:0.88rem;">
+          <li>건강한 피험자 8명</li>
+          <li>PC-MRI를 사용하여 뇌-척수 방향의 CSF 이동량 측정</li>
+          <li>일반 호흡 → 느리고 복식 깊은 호흡으로 전환</li>
+          <li>각 호흡 사이클에서 두개강에서 척수강으로 이동하는 CSF 최대 부피 측정</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>핵심 결과:</strong></p>
+        <ul style="margin-top:8px; padding-left:20px; font-size:0.88rem;">
+          <li>느리고 복식적인 호흡 시 <strong>최대 CSF 변위 56% 증가</strong></li>
+          <li>동맥-정맥 혈액 용적 최대 변화량도 41% 증가</li>
+          <li>CSF 이동의 주 구동력: 동맥 유입량과 정맥 유출량의 <strong>차이</strong> → 복식 호흡으로 정맥 유출 강화 시 CSF 이동 효율 ↑</li>
+          <li>수면 중 느린 복식호흡 패턴 = 독소 제거 효율 극대화의 기제</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong>메커니즘 설명 (이 논문의 핵심 주장):</strong><br>
+      두개-척수 CSF 이동을 구동하는 힘 = <em>뇌로 들어오는 동맥혈 용적</em> - <em>심장으로 나가는 정맥혈 용적</em>. 복식 호흡 시 흉강 음압이 커져 정맥 귀환이 촉진되므로, 두개 내 정맥혈이 더 많이 빠져나간다 → 이 공간을 채우기 위해 척수로부터 CSF가 두개 내로 유입 → 뇌 내 CSF 흐름 증가 → 독소(아밀로이드 등) 척수강 방향 배출 촉진 → 척수의 지주막하 공간에서 혈액으로 재흡수.
+    </div>
+  </div>
+
+  <!-- 5. Liu et al. 2024 정량 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📊</span> 5. 심호흡 시 뇌혈관 역학 변화 — Liu et al. (2024)</div>
+
+    <div class="card" style="border-color:var(--accent);">
+      <p style="font-size:0.95rem;"><strong>논문:</strong> "Cardiac and respiratory activities induce temporal changes in cerebral blood volume, balanced by a mirror CSF volume displacement in the spinal canal" <em>NeuroImage.</em> 2024;305:120988</p>
+      <p style="font-size:0.82rem; color:var(--text2); margin:4px 0 12px;">Liu P et al. | <a href="https://doi.org/10.1016/j.neuroimage.2024.120988" target="_blank" style="color:var(--accent);">DOI: 10.1016/j.neuroimage.2024.120988</a></p>
+    </div>
+
+    <table style="margin-top:16px;">
+      <tr>
+        <th>측정 지표</th>
+        <th>자유 호흡 (기준값)</th>
+        <th>심호흡 시 변화</th>
+      </tr>
+      <tr>
+        <td>총 뇌동맥 유량</td>
+        <td>12.5 mL/s</td>
+        <td>8.8 mL/s (<strong>-29%</strong>)</td>
+      </tr>
+      <tr>
+        <td>심장 주기 기간</td>
+        <td>0.90초</td>
+        <td>0.77초 (<strong>-15%</strong>)</td>
+      </tr>
+      <tr>
+        <td>심장-구동 CSF 변위 폭</td>
+        <td>기준</td>
+        <td><strong>-23%</strong> (심장 기여 감소)</td>
+      </tr>
+      <tr>
+        <td>호흡-구동 CBV 진폭</td>
+        <td>기준</td>
+        <td><strong>+207%</strong> (호흡 기여 급증)</td>
+      </tr>
+      <tr>
+        <td>호흡-구동 CSF 변위 진폭</td>
+        <td>기준</td>
+        <td><strong>+326%</strong> 🚀</td>
+      </tr>
+    </table>
+
+    <div class="warning-box">
+      <strong>⚠️ 중요한 해석:</strong> 심호흡 시 "심장 구동 CSF 이동"은 오히려 감소하지만, <strong>"호흡 구동 CSF 이동"이 3.3배 이상 급증</strong>하여 전체적인 CSF 이동은 크게 증가한다. 즉, 호흡이 심장보다 훨씬 강력한 CSF 조절자가 된다. 이는 PC-MRI 프로토콜에서 호흡 세션 분리가 얼마나 중요한지를 보여준다.
+    </div>
+  </div>
+
+  <!-- 6. 수면 중 호흡과 글림패틱 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">💤</span> 6. 수면 중 호흡 패턴 — 왜 밤에 뇌 청소가 활발한가?</div>
+
+    <p>수면 중, 특히 <strong>NREM 서파수면(SWS) 단계</strong>에서 호흡은 느리고 규칙적이며 복식 위주가 된다. Helakari et al. (2022)은 fMRI + EEG를 동시에 사용하여 NREM 수면 중 뇌 박동이 증가함을 보였다:</p>
+
+    <div class="card" style="border-color:var(--accent2);">
+      <h4 style="color:var(--accent2);">NREM 수면 시 변화 (Helakari et al., J Neurosci 2022)</h4>
+      <ul style="padding-left:20px; font-size:0.88rem; margin-top:8px;">
+        <li>매우 저주파(&lt;0.1 Hz) <strong>혈관운동(vasomotion) 박동 강도 증가</strong> — 후두엽, 두정엽 중심</li>
+        <li><strong>호흡 박동 강도도 전 뇌 영역에서 증가</strong></li>
+        <li>EEG 서파(0.2–2 Hz)와 공간적으로 일치하는 뇌 박동 증가 패턴</li>
+        <li>스펙트럼 엔트로피(신호 복잡성) 감소 → 더 규칙적이고 동기화된 뇌 역학</li>
+        <li>결론: <strong>수면 중 호흡과 혈관운동의 동기화가 글림패틱 흐름의 핵심 구동력</strong></li>
+      </ul>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <strong>💡 본 연구 디자인에의 함의:</strong><br>
+      웨어러블(mobiCARE)로 측정하는 <strong>야간 호흡 패턴 및 HRV</strong>가 바로 이 "수면 중 글림패틱 구동력"의 간접 측정치다. 석문호흡 전문가군이 수면 중에도 더 느리고 깊은 호흡 패턴을 보인다면 → 수면 중 글림패틱 활성화 → 아밀로이드 감소(Florbetaben PET) + 대사 보존(FDG PET) + 인지 보존의 연결 고리가 완성된다.
+    </div>
+  </div>
+
+  <!-- 7. State vs Trait 구분 전략 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔬</span> 7. State vs. Trait 구분 전략 — 실험 프로토콜 설계 핵심</div>
+
+    <div class="grid-2">
+      <div class="card" style="border-color:var(--orange);">
+        <h4 style="color:var(--orange);">State 효과 (일시적 상태)</h4>
+        <p>MRI 스캔 중 실험자가 "심호흡 지시"를 했을 때 나타나는 급성 CSF 증가. 누구나 (훈련자, 비훈련자 모두) 심호흡을 하면 나타남.</p>
+        <p style="margin-top: 8px; font-size:0.82rem;">측정 방법: <strong>심호흡 세션</strong> 중 PC-MRI 값</p>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <h4 style="color:var(--green);">Trait 효과 (생리적 리모델링)</h4>
+        <p>훈련자가 "<strong>평상시 일반 호흡</strong>"을 할 때도 비훈련자보다 CSF 흐름이 더 좋음. 이것이 장기 훈련의 결과. Lim et al. 2025가 발견한 것.</p>
+        <p style="margin-top: 8px; font-size:0.82rem;">측정 방법: <strong>자유 호흡(spontaneous breathing) 세션</strong> 중 PC-MRI 값</p>
+      </div>
+    </div>
+
+    <p style="margin-top:16px;"><strong>State vs. Trait 분리를 위한 PC-MRI 프로토콜 제안:</strong></p>
+    <div class="step-flow" style="margin-top:12px;">
+      <div class="step"><strong>세션 1</strong><br>안정 자유호흡<br>(Spontaneous)<br>5분</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>세션 2</strong><br>복식 심호흡<br>(Guided Deep)<br>5분</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>휴식</strong><br>일반 호흡<br>회복<br>3분</div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>세션 3</strong><br>다시 자유호흡<br>(Post-training)<br>5분</div>
+    </div>
+    <p style="font-size:0.85rem; color:var(--text2); margin-top:8px;">세션 1(자유호흡) 값의 군간 차이 = Trait 효과 / 세션 2(심호흡) 값의 군간 차이 = State + Trait 합산 / (세션 2 - 세션 1) = 순수 State 효과</p>
+  </div>
+
+  <!-- 참고문헌 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📑</span> 핵심 참고문헌</div>
+    <div class="ref">
+      <p>Based on articles retrieved from PubMed:</p><br>
+      <p>1. Lim S, et al. <strong>Human cerebrospinal fluid net flow enhanced by respiration during the awake state.</strong> <em>Nat Commun.</em> 2025;16(1):11499. <a href="https://doi.org/10.1038/s41467-025-66548-4" target="_blank">DOI: 10.1038/s41467-025-66548-4</a> ⭐ <em>본 연구그룹 핵심 선행 논문</em></p><br>
+      <p>2. Burman R, Alperin N. <strong>CSF-to-blood toxins clearance is modulated by breathing through cranio-spinal CSF oscillation.</strong> <em>J Sleep Res.</em> 2023;33(1):e14029. <a href="https://doi.org/10.1111/jsr.14029" target="_blank">DOI: 10.1111/jsr.14029</a></p><br>
+      <p>3. Liu P, et al. <strong>Cardiac and respiratory activities induce temporal changes in cerebral blood volume, balanced by a mirror CSF volume displacement in the spinal canal.</strong> <em>NeuroImage.</em> 2024;305:120988. <a href="https://doi.org/10.1016/j.neuroimage.2024.120988" target="_blank">DOI: 10.1016/j.neuroimage.2024.120988</a></p><br>
+      <p>4. Helakari H, et al. <strong>Human NREM Sleep Promotes Brain-Wide Vasomotor and Respiratory Pulsations.</strong> <em>J Neurosci.</em> 2022;42(12):2503-2515. <a href="https://doi.org/10.1523/JNEUROSCI.0934-21.2022" target="_blank">DOI: 10.1523/JNEUROSCI.0934-21.2022</a></p><br>
+      <p>5. Töger J, et al. <strong>Real-time imaging of respiratory effects on cerebrospinal fluid flow in small diameter passageways.</strong> <em>Magn Reson Med.</em> 2022;88(2):770-786. <a href="https://doi.org/10.1002/mrm.29248" target="_blank">DOI: 10.1002/mrm.29248</a></p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

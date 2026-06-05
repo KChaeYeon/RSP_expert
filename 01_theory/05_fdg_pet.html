@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FDG PET — 뇌 포도당 대사 | RSP_PET 이론 정리</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --accent:#f5a623; --blue:#4f9cf9; --green:#3ecf8e; --red:#e05c5c; --purple:#7c5cbf; --text:#e8eaf0; --text2:#9ba3b8; --border:#2e3452; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; font-size:15px; line-height:1.75; }
+  .hero { background:linear-gradient(135deg,#e65100 0%,#bf360c 40%,#4a148c 100%); padding:50px 40px 40px; }
+  .hero h1 { font-size:2.1rem; font-weight:700; margin-bottom:8px; }
+  .hero p { color:rgba(255,255,255,0.75); max-width:700px; }
+  .badge { display:inline-block; background:rgba(245,166,35,0.2); border:1px solid var(--accent); color:var(--accent); border-radius:20px; padding:3px 12px; font-size:0.78rem; margin-bottom:16px; }
+  .nav-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; gap:20px; flex-wrap:wrap; }
+  .nav-bar a { color:var(--text2); text-decoration:none; font-size:0.85rem; }
+  .nav-bar a:hover { color:var(--accent); }
+  .nav-bar a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 24px; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:28px; }
+  .section-title { font-size:1.3rem; font-weight:700; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .highlight-box { background:rgba(245,166,35,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .warning-box { background:rgba(224,92,92,0.08); border-left:4px solid var(--red); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .key-box { background:rgba(62,207,142,0.08); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0; }
+  .card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .card h4 { color:var(--blue); font-size:0.95rem; margin-bottom:10px; }
+  .diagram-container { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:24px; margin:20px 0; text-align:center; }
+  .diagram-label { font-size:0.82rem; color:var(--text2); margin-top:12px; font-style:italic; }
+  .protocol-step { display:flex; align-items:flex-start; gap:16px; padding:14px 0; border-bottom:1px solid var(--border); }
+  .protocol-num { background:var(--accent); color:#000; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .ref { font-size:0.78rem; color:var(--text2); margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+  .ref a { color:var(--blue); text-decoration:none; }
+  @media(max-width:768px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">📚 이론 | Theory · 05</div>
+  <h1>⚡ FDG PET — 뇌 포도당 대사 영상</h1>
+  <p>왜 찍는가? 무엇을 보는가? 표준 프로토콜은? 글림패틱 연구에서의 역할까지 완전 정리</p>
+</div>
+
+<div class="nav-bar">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="02_csf_basics.html">② CSF 기초</a>
+  <a href="03_respiration_csf_mechanism.html">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html" class="active">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="07_sleep_glymphatic.html">⑦ 수면-글림패틱</a>
+  <a href="08_aqp4_astrocytes.html">⑧ AQP4/성상교세포</a>
+  <a href="09_brain_aging.html">⑨ 뇌 노화</a>
+  <a href="10_blood_biomarkers.html">⑩ 혈액 바이오마커</a>
+  <a href="11_autonomic_hrv.html">⑪ 자율신경/HRV</a>
+  <a href="../02_paper/paper_index.html">📄 논문 정리</a>
+</div>
+
+<div class="container">
+
+  <!-- 핵심 요약 -->
+  <div class="key-box">
+    <strong>🎯 핵심 요약:</strong> ¹⁸F-FDG(불소-18 플루오로데옥시글루코스) PET은 뇌가 포도당을 얼마나 소비하는지를 측정한다. 활발히 작동하는 뇌 영역은 포도당을 많이 소비하므로 밝게 보이고, 퇴행·손상된 영역은 포도당 대사가 줄어 어둡게 보인다. 알츠하이머병의 조기 진단에 필수적이며, 본 연구에서는 <strong>글림패틱 기능의 간접적 지표</strong>로 활용된다.
+  </div>
+
+  <!-- 1. FDG란 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🧪</span> 1. ¹⁸F-FDG란 무엇인가?</div>
+
+    <div class="grid-2">
+      <div>
+        <p><strong>FDG = ¹⁸F-Fluorodeoxyglucose (불소화 포도당)</strong></p>
+        <ul style="margin-top:12px; padding-left:20px; font-size:0.88rem;">
+          <li>포도당(glucose)의 화학 구조에서 수산기(-OH) 하나를 방사성 불소(¹⁸F)로 치환한 물질</li>
+          <li>뇌 세포(특히 뉴런)는 FDG를 포도당으로 착각하고 세포 내로 흡수</li>
+          <li>그러나 정상 포도당과 달리 <strong>세포 내에서 더 이상 대사되지 못하고 갇혀버림</strong> ("metabolic trapping")</li>
+          <li>갇힌 FDG에서 방출되는 양전자(positron)를 PET 카메라가 감지</li>
+          <li>¹⁸F의 반감기: 109.8분 → 촬영 후 빠르게 붕괴하여 방사선 노출 감소</li>
+        </ul>
+      </div>
+      <div class="diagram-container" style="margin:0;">
+        <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+          <rect width="280" height="200" fill="#22263a" rx="8"/>
+          <!-- 세포막 -->
+          <ellipse cx="140" cy="100" rx="100" ry="70" fill="rgba(245,166,35,0.1)" stroke="#f5a623" stroke-width="2"/>
+          <text x="140" y="30" fill="#f5a623" font-size="10" text-anchor="middle">뉴런</text>
+
+          <!-- FDG 들어오는 경로 -->
+          <rect x="10" y="85" width="40" height="25" rx="6" fill="rgba(79,156,249,0.3)" stroke="#4f9cf9" stroke-width="1.5"/>
+          <text x="30" y="101" fill="#4f9cf9" font-size="9" text-anchor="middle">FDG</text>
+          <defs><marker id="arrY" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#4f9cf9"/></marker></defs>
+          <path d="M 50,98 L 80,98" stroke="#4f9cf9" stroke-width="1.5" marker-end="url(#arrY)"/>
+          <text x="65" y="92" fill="#9ba3b8" font-size="8" text-anchor="middle">GLUT</text>
+
+          <!-- 세포 내 FDG-6P -->
+          <rect x="90" y="75" width="60" height="30" rx="6" fill="rgba(245,166,35,0.4)" stroke="#f5a623" stroke-width="1.5"/>
+          <text x="120" y="87" fill="#f5a623" font-size="8" text-anchor="middle">FDG-6P</text>
+          <text x="120" y="99" fill="#9ba3b8" font-size="7" text-anchor="middle">갇힘!</text>
+
+          <!-- 방사선 방출 -->
+          <circle cx="120" cy="90" r="4" fill="white" opacity="0.8"/>
+          <line x1="120" y1="90" x2="155" y2="60" stroke="#e05c5c" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="160" y="55" fill="#e05c5c" font-size="9">β⁺ 방출</text>
+          <line x1="120" y1="90" x2="155" y2="120" stroke="#e05c5c" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+          <text x="140" y="170" fill="#9ba3b8" font-size="9" text-anchor="middle">포도당 소비 多 = FDG 축적 多</text>
+          <text x="140" y="183" fill="#9ba3b8" font-size="9" text-anchor="middle">= PET 신호 강함</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 왜 FDG PET을 찍는가 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">❓</span> 2. 본 연구에서 FDG PET을 찍는 이유</div>
+
+    <div class="warning-box">
+      <strong>⚠️ 중요한 구분:</strong> FDG PET은 글림패틱 기능을 <em>직접 측정하지는 못한다</em>. 그러나 글림패틱 기능이 저하될 때 뒤따르는 <strong>신경 대사 변화</strong>를 간접적으로 반영한다. 이것이 이 연구에서 FDG PET을 선택한 이유다.
+    </div>
+
+    <div class="grid-3">
+      <div class="card" style="border-color:var(--accent);">
+        <h4 style="color:var(--accent);">① 아밀로이드-뉴런 대사 연결</h4>
+        <p>글림패틱 기능 저하 → 아밀로이드-β 축적 → 시냅스 손상 → 뉴런 포도당 대사 감소 → FDG 신호 감소. 이 연결 고리의 하위 단계를 FDG PET이 포착.</p>
+      </div>
+      <div class="card" style="border-color:var(--blue);">
+        <h4 style="color:var(--blue);">② 알츠하이머 위험 스크리닝</h4>
+        <p>60~79세 성인에서 FDG-PET 저대사 패턴 (후두정엽, 후측 대상회, 쐐기앞소엽)은 <strong>AD 전구 증상</strong>의 민감도 높은 지표. 석문호흡이 이 패턴을 늦추는가?</p>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <h4 style="color:var(--green);">③ 뇌 건강의 종합 지표</h4>
+        <p>글림패틱 기능, 염증, 혈류, 시냅스 밀도가 모두 포도당 대사에 영향. FDG-PET는 이러한 신경 건강 상태의 <strong>통합적 마커</strong>로 기능.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>📊 구체적 연구 질문:</strong>
+      <ul style="margin-top:8px; padding-left:20px;">
+        <li>석문호흡 전문가군은 동일 연령 대조군보다 FDG 대사가 더 보존되어 있는가?</li>
+        <li>PC-MRI로 측정한 CSF 순방향 유량과 FDG 대사 사이에 상관관계가 있는가? (글림패틱 기능 ↔ 대사 보존)</li>
+        <li>Florbetaben PET의 아밀로이드 축적량과 FDG 저대사 사이의 관계는 두 군에서 다른가?</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. FDG PET이 보여주는 AD 패턴 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🧠</span> 3. 알츠하이머 관련 FDG 저대사 패턴</div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 650 260" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; height:auto;">
+        <rect width="650" height="260" fill="#1a1d27" rx="8"/>
+
+        <!-- 정상 뇌 -->
+        <rect x="30" y="20" width="270" height="220" rx="10" fill="rgba(255,255,255,0.02)" stroke="var(--border)" stroke-width="1"/>
+        <text x="165" y="42" fill="#3ecf8e" font-size="12" text-anchor="middle" font-weight="bold">정상 FDG PET</text>
+        <ellipse cx="165" cy="135" rx="100" ry="75" fill="#ff9800" opacity="0.6"/>
+        <ellipse cx="130" cy="120" rx="50" ry="40" fill="#ffeb3b" opacity="0.7"/>
+        <ellipse cx="200" cy="120" rx="50" ry="40" fill="#ffeb3b" opacity="0.7"/>
+        <text x="165" y="230" fill="#3ecf8e" font-size="10" text-anchor="middle">균일한 높은 대사 → 전체 밝음</text>
+
+        <!-- AD 뇌 -->
+        <rect x="350" y="20" width="270" height="220" rx="10" fill="rgba(255,255,255,0.02)" stroke="var(--border)" stroke-width="1"/>
+        <text x="485" y="42" fill="#e05c5c" font-size="12" text-anchor="middle" font-weight="bold">AD 패턴 FDG PET</text>
+        <ellipse cx="485" cy="135" rx="100" ry="75" fill="#ff9800" opacity="0.4"/>
+        <!-- 저대사 영역들 -->
+        <ellipse cx="485" cy="110" rx="45" ry="30" fill="#212121" opacity="0.8"/>
+        <text x="485" y="108" fill="#e05c5c" font-size="8" text-anchor="middle">쐐기앞소엽</text>
+        <text x="485" y="118" fill="#e05c5c" font-size="7" text-anchor="middle">(Precuneus)</text>
+        <ellipse cx="435" cy="145" rx="30" ry="20" fill="#1a1a2e" opacity="0.8"/>
+        <text x="435" y="147" fill="#e05c5c" font-size="7" text-anchor="middle">후두정</text>
+        <ellipse cx="535" cy="145" rx="30" ry="20" fill="#1a1a2e" opacity="0.8"/>
+        <text x="535" y="147" fill="#e05c5c" font-size="7" text-anchor="middle">측두엽</text>
+        <text x="485" y="230" fill="#e05c5c" font-size="10" text-anchor="middle">특정 영역 저대사 (어두운 공백)</text>
+      </svg>
+      <p class="diagram-label">그림 1. 정상 FDG PET vs 알츠하이머 패턴. AD에서는 쐐기앞소엽(precuneus), 후측 대상회(posterior cingulate), 두정엽, 측두엽의 대사가 먼저 감소한다.</p>
+    </div>
+
+    <table>
+      <tr>
+        <th>AD 단계</th>
+        <th>FDG 저대사 주요 영역</th>
+        <th>임상 증상</th>
+      </tr>
+      <tr>
+        <td>전임상기 (Preclinical)</td>
+        <td>쐐기앞소엽, 후측 대상회 초기 감소</td>
+        <td>증상 없음 — 아밀로이드 PET 이상 선행</td>
+      </tr>
+      <tr>
+        <td>MCI (경도인지장애)</td>
+        <td>두정엽, 측두엽 확대</td>
+        <td>기억력 저하, 일상 기능은 유지</td>
+      </tr>
+      <tr>
+        <td>초기 AD</td>
+        <td>전두엽 일부 포함, 광범위 확산</td>
+        <td>기억, 언어, 실행기능 장애</td>
+      </tr>
+      <tr>
+        <td><strong>보존 영역 (기준선)</strong></td>
+        <td>소뇌, 일차감각운동피질</td>
+        <td>가장 늦게 영향받음 → SUVR 기준 영역으로 사용</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 4. 표준 촬영 프로토콜 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📋</span> 4. 뇌 FDG PET 표준 촬영 프로토콜</div>
+
+    <div class="protocol-step">
+      <div class="protocol-num">1</div>
+      <div>
+        <strong>촬영 전 준비 (4~6시간 전)</strong><br>
+        <ul style="margin-top:6px; padding-left:20px; font-size:0.88rem;">
+          <li>최소 <strong>4~6시간 금식</strong> (물은 허용)</li>
+          <li>혈당 측정: <strong>&lt;200 mg/dL</strong> 권고 (이상 시 연기 또는 주의)</li>
+          <li>격렬한 신체 활동 금지 (근육 FDG 흡수 방지)</li>
+          <li>조용하고 따뜻한 대기 환경 (스트레스, 추위 → 갈색지방 활성화로 위양성 가능)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="protocol-step">
+      <div class="protocol-num">2</div>
+      <div>
+        <strong>FDG 주사</strong><br>
+        <ul style="margin-top:6px; padding-left:20px; font-size:0.88rem;">
+          <li>용량: <strong>185~370 MBq (5~10 mCi)</strong>, 정맥 주사</li>
+          <li>표준용량: ~185 MBq (체중 고려 시 3~5 MBq/kg)</li>
+          <li>주사 후 환자는 최대한 <strong>안정 상태 유지</strong> (눈 감거나 반열린 상태, 조용한 방)</li>
+          <li>대화, 독서, 스마트폰 사용 금지 → 뇌 특정 영역 활성화 방지</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="protocol-step">
+      <div class="protocol-num">3</div>
+      <div>
+        <strong>흡수 대기 시간 (Uptake period)</strong><br>
+        <ul style="margin-top:6px; padding-left:20px; font-size:0.88rem;">
+          <li>표준: <strong>주사 후 30~60분</strong> 대기 (뇌 PET의 경우 30~45분이 일반적)</li>
+          <li>이 시간 동안 FDG가 뇌 세포에 흡수되고 포획(trapping)됨</li>
+          <li>¹⁸F 반감기(~110분)를 고려하여 너무 오래 기다리면 신호 감소</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="protocol-step">
+      <div class="protocol-num">4</div>
+      <div>
+        <strong>PET 촬영</strong><br>
+        <ul style="margin-top:6px; padding-left:20px; font-size:0.88rem;">
+          <li>촬영 시간: <strong>15~30분</strong></li>
+          <li>정적 영상 (static scan): 단일 프레임으로 전체 흡수 후 상태 측정</li>
+          <li>대부분의 경우 MRI와 함께 PET/MRI 기기로 동시 촬영 (해부학적 정위 위해)</li>
+          <li>머리 고정 장치 사용하여 움직임 최소화</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="protocol-step" style="border-bottom:none;">
+      <div class="protocol-num">5</div>
+      <div>
+        <strong>영상 분석</strong><br>
+        <ul style="margin-top:6px; padding-left:20px; font-size:0.88rem;">
+          <li><strong>SUV (Standardized Uptake Value)</strong>: 주사 용량과 체중으로 보정한 흡수값</li>
+          <li><strong>SUVR (SUV Ratio)</strong>: 관심 영역 / 기준 영역(보통 소뇌) 비율 → 개인 간 비교 가능</li>
+          <li><strong>SPM (Statistical Parametric Mapping)</strong>: 전체 뇌 복셀별 통계 비교 (군 간 차이 맵)</li>
+          <li>표준 뇌 공간(MNI) 정규화 후 분석</li>
+          <li>관심 영역(ROI) 분석: 특정 뇌 영역별 대사값 추출</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 본 연구에서의 구체적 활용 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🎯</span> 5. 본 연구(RSP_PET)에서의 FDG PET 구체적 활용 전략</div>
+
+    <table>
+      <tr>
+        <th>분석 전략</th>
+        <th>방법</th>
+        <th>답하는 질문</th>
+      </tr>
+      <tr>
+        <td>전체 뇌 군간 비교</td>
+        <td>SPM two-sample t-test (석문호흡 vs 대조)</td>
+        <td>어느 뇌 영역에서 대사 차이가 있는가?</td>
+      </tr>
+      <tr>
+        <td>AD 패턴 ROI 분석</td>
+        <td>후두정엽, 쐐기앞소엽, 측두엽 SUVR 추출</td>
+        <td>석문호흡 군이 AD 취약 영역을 더 보존했는가?</td>
+      </tr>
+      <tr>
+        <td>FDG ↔ PC-MRI 상관</td>
+        <td>CSF 유량 지표 vs. 뇌 대사 SUVR 피어슨 상관</td>
+        <td>CSF 흐름이 좋을수록 뇌 대사가 보존되는가?</td>
+      </tr>
+      <tr>
+        <td>FDG ↔ Florbetaben 상관</td>
+        <td>아밀로이드 축적 vs. 포도당 대사 관계</td>
+        <td>아밀로이드가 많을수록 대사가 낮은가? 군간 차이는?</td>
+      </tr>
+      <tr>
+        <td>FDG ↔ 인지검사 상관</td>
+        <td>MMSE, MoCA 등 vs. 대사값</td>
+        <td>대사가 보존된 군이 인지 기능도 더 좋은가?</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 6. 주의사항 / Reviewer 대응 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚠️</span> 6. FDG PET 해석 시 주의사항 — Reviewer 대응 논리</div>
+
+    <div class="grid-2">
+      <div class="card" style="border-color:var(--red);">
+        <h4 style="color:var(--red);">잠재적 비판 ① — 교란 변수</h4>
+        <p>FDG 대사는 혈당, 약물(특히 당뇨약), 수면 상태, 스캔 직전 활동에 의해 영향받는다.</p>
+        <p style="margin-top:8px;"><strong>대응:</strong> 모든 피험자 동일 프로토콜 적용 (표준화된 금식, 혈당 측정, 안정 대기). 당뇨 환자 제외 기준 설정. 통계 분석 시 교란 변수 공변량으로 보정.</p>
+      </div>
+      <div class="card" style="border-color:var(--red);">
+        <h4 style="color:var(--red);">잠재적 비판 ② — 인과관계 불명확</h4>
+        <p>FDG 대사 차이가 호흡 훈련의 결과인가, 아니면 처음부터 건강한 사람이 호흡 훈련을 선택했는가?</p>
+        <p style="margin-top:8px;"><strong>대응:</strong> 단면 연구의 근본적 한계 (인정). 그러나 PC-MRI CSF 흐름 지표와 FDG 대사의 상관관계 분석 → 기전적 연결 고리 증거 제시. 향후 추적 연구 필요성 논의.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 참고문헌 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📑</span> 핵심 참고문헌</div>
+    <div class="ref">
+      <p>Based on articles retrieved from PubMed:</p><br>
+      <p>1. Herholz K, Carter SF, Jones M. <strong>Positron emission tomography imaging in dementia.</strong> <em>Br J Radiol.</em> 2007;80 Spec No 2:S160-7. (FDG PET in dementia — 개념적 기반)</p><br>
+      <p>2. Mosconi L. <strong>Glucose metabolism in normal aging and Alzheimer's disease: methodological and physiological considerations for PET studies.</strong> <em>Clin Transl Imaging.</em> 2013;1(4). (노화와 FDG PET 기준값)</p><br>
+      <p>3. Rasmussen MK, Mestre H, Nedergaard M. <strong>Fluid transport in the brain.</strong> <em>Physiol Rev.</em> 2021;102(2):1025-1151. <a href="https://doi.org/10.1152/physrev.00031.2020" target="_blank">DOI: 10.1152/physrev.00031.2020</a> (글림패틱 - 대사 연결)</p><br>
+      <p>4. Benveniste H, et al. <strong>The Glymphatic System and Waste Clearance with Brain Aging: A Review.</strong> <em>Gerontology.</em> 2019;65(2):106-119. <a href="https://doi.org/10.1159/000490349" target="_blank">DOI: 10.1159/000490349</a></p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

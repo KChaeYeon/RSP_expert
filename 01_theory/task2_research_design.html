@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2 — 연구 임팩트·Research Gap·설계 방향 | RSP_PET</title>
+<style>
+  :root {
+    --bg:#0a0d14; --surface:#131720; --surface2:#1a1d27; --surface3:#22263a;
+    --accent:#4f9cf9; --green:#3ecf8e; --orange:#f5a623; --red:#e05c5c;
+    --purple:#7c5cbf; --yellow:#fbbf24; --teal:#2dd4bf;
+    --text:#e8eaf0; --text2:#b0b8cc; --border:#2e3452;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; font-size:17px; line-height:1.85; }
+
+  .hero { background:linear-gradient(135deg,#1a0533 0%,#0d1b2a 40%,#14293d 100%); padding:56px 48px 44px; border-bottom:2px solid var(--border); }
+  .hero .tag { display:inline-flex; gap:8px; align-items:center; background:rgba(124,92,191,.15); border:1px solid rgba(124,92,191,.4); border-radius:20px; padding:5px 16px; font-size:0.88rem; color:#c4b5fd; margin-bottom:20px; }
+  .hero h1 { font-size:2.4rem; font-weight:800; margin-bottom:12px; }
+  .hero p { color:rgba(255,255,255,.65); font-size:1rem; max-width:760px; }
+
+  .nav { background:var(--surface); border-bottom:1px solid var(--border); padding:12px 48px; display:flex; gap:20px; flex-wrap:wrap; font-size:0.88rem; }
+  .nav a { color:var(--text2); text-decoration:none; }
+  .nav a:hover { color:var(--accent); }
+  .nav a.cur { color:var(--purple); font-weight:700; }
+
+  .container { max-width:1060px; margin:0 auto; padding:52px 28px 80px; }
+
+  /* 섹션 */
+  .sec { background:var(--surface); border:1.5px solid var(--border); border-radius:16px; padding:36px 38px; margin-bottom:32px; }
+  .sec-title { font-size:1.45rem; font-weight:800; margin-bottom:24px; display:flex; align-items:center; gap:12px; }
+  h3 { font-size:1.15rem; font-weight:700; margin:28px 0 12px; }
+  p { margin-bottom:14px; }
+  ul { padding-left:24px; margin-bottom:14px; }
+  li { margin-bottom:8px; }
+
+  /* 강조 박스 */
+  .box { border-radius:10px; padding:18px 22px; margin:20px 0; }
+  .box-gap  { background:rgba(224,92,92,.07);  border-left:5px solid var(--red);    }
+  .box-key  { background:rgba(62,207,142,.07); border-left:5px solid var(--green);  }
+  .box-warn { background:rgba(245,166,35,.07); border-left:5px solid var(--orange); }
+  .box-info { background:rgba(79,156,249,.07); border-left:5px solid var(--accent); }
+  .box-purp { background:rgba(124,92,191,.08); border-left:5px solid var(--purple); }
+  .box-teal { background:rgba(45,212,191,.07); border-left:5px solid var(--teal);   }
+  .box-title { font-size:0.85rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:8px; }
+  .box-gap  .box-title { color:var(--red);    }
+  .box-key  .box-title { color:var(--green);  }
+  .box-warn .box-title { color:var(--orange); }
+  .box-info .box-title { color:var(--accent); }
+  .box-purp .box-title { color:var(--purple); }
+  .box-teal .box-title { color:var(--teal);   }
+
+  /* 가설 카드 */
+  .hypo-cards { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin:20px 0; }
+  .hypo { border-radius:12px; padding:22px; border:2px solid; }
+  .hypo-1 { border-color:rgba(79,156,249,.5);  background:rgba(79,156,249,.06);  }
+  .hypo-2 { border-color:rgba(167,139,250,.5); background:rgba(167,139,250,.06); }
+  .hypo-3 { border-color:rgba(45,212,191,.5);  background:rgba(45,212,191,.06);  }
+  .hypo-num { font-size:0.78rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px; }
+  .hypo-1 .hypo-num { color:var(--accent); }
+  .hypo-2 .hypo-num { color:#a78bfa; }
+  .hypo-3 .hypo-num { color:var(--teal); }
+  .hypo-title { font-size:1.05rem; font-weight:800; margin-bottom:10px; }
+  .hypo-body  { font-size:0.87rem; color:var(--text2); line-height:1.7; }
+
+  /* 비교 표 */
+  table { width:100%; border-collapse:collapse; margin:18px 0; font-size:0.9rem; }
+  th { background:var(--surface2); color:var(--accent); padding:12px 16px; text-align:left; border-bottom:2px solid var(--border); font-size:0.85rem; }
+  td { padding:12px 16px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:hover td { background:rgba(255,255,255,.02); }
+  .td-red   { color:var(--red);   font-weight:700; }
+  .td-green { color:var(--green); font-weight:700; }
+
+  /* 인과 사슬 */
+  .chain { display:flex; flex-direction:column; gap:0; }
+  .chain-item { display:flex; gap:16px; }
+  .chain-left { display:flex; flex-direction:column; align-items:center; width:36px; flex-shrink:0; }
+  .chain-dot  { width:14px; height:14px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+  .chain-line { width:2px; flex:1; background:var(--border); margin:4px 0; min-height:30px; }
+  .chain-body { padding:10px 0 24px; }
+  .chain-step { font-weight:700; font-size:1.05rem; margin-bottom:4px; }
+  .chain-sub  { font-size:0.87rem; color:var(--text2); }
+
+  /* 논리 흐름 */
+  .logic-flow { counter-reset:logic; }
+  .logic-item { counter-increment:logic; display:grid; grid-template-columns:40px 1fr; gap:16px; margin-bottom:20px; align-items:start; }
+  .logic-num { background:var(--surface3); color:var(--accent); border-radius:8px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1rem; flex-shrink:0; margin-top:2px; }
+  .logic-body { font-size:0.92rem; }
+  .logic-title { font-weight:700; font-size:1rem; margin-bottom:4px; }
+
+  /* 구분선 */
+  .divider { border:none; border-top:1px solid var(--border); margin:32px 0; }
+
+  /* 경고 배너 */
+  .critical-banner { background:rgba(224,92,92,.1); border:2px solid rgba(224,92,92,.4); border-radius:12px; padding:20px 24px; margin:24px 0; }
+  .critical-banner h4 { color:var(--red); font-size:1rem; margin-bottom:8px; }
+
+  .footer { background:var(--surface); border-top:1px solid var(--border); padding:20px 48px; text-align:center; font-size:0.82rem; color:var(--text2); }
+
+  @media(max-width:800px){ .hypo-cards { grid-template-columns:1fr; } .hero h1 { font-size:1.8rem; } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">🧠 Task 2 — 연구 설계 심층 분석</div>
+  <h1>Research Gap · 핵심 가설 · 연구 설계 방향</h1>
+  <p>지금까지 정리된 이론과 선행 논문을 바탕으로 — 논리적 허점 없이 도출한 임팩트 있는 연구 프레임</p>
+</div>
+
+<div class="nav">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="03_respiration_csf_mechanism.html">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="../02_paper/paper_index.html">📄 논문</a>
+  <a href="task2_research_design.html" class="cur">🎯 Task 2 — 연구 설계</a>
+</div>
+
+<div class="container">
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 0. 출발점 — 선행 논문의 지형도 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--text2);">
+    <span>📍</span> 출발점 — 현재 필드가 어디까지 왔는가
+  </div>
+
+  <p>
+    연구 설계를 논하기 전에, <strong>현재 필드의 지형도</strong>를 정확히 파악해야 한다.
+    무엇이 알려져 있고, 무엇이 아직 모르는지를 명확히 해야 Research Gap이 나온다.
+  </p>
+
+  <h3>확립된 사실 (Established)</h3>
+  <ul>
+    <li>글림패틱 시스템이 Aβ, tau 등 신경독성 물질을 뇌에서 제거한다 — <em>Nedergaard group, 2012~2022</em></li>
+    <li>글림패틱은 NREM 수면 중 ~2배 활성화된다 — <em>Xie et al., Science 2013; Jessen et al. 2015</em></li>
+    <li>글림패틱 기능은 노화와 함께 저하되며, 이것이 AD 위험을 높인다 — <em>Benveniste et al. 2019</em></li>
+    <li>호흡은 CSF 동역학에 영향을 준다 — 복식 호흡 시 CSF 변위 56% 증가 — <em>Burman &amp; Alperin 2023</em></li>
+    <li>심호흡 시 호흡-구동 CSF 변위가 326% 급증하며, 이때 호흡이 심장보다 더 강력한 CSF 구동력이 된다 — <em>Liu et al. 2024</em></li>
+    <li>NREM 수면 중 vasomotion + 호흡 박동 강도가 증가한다 — <em>Helakari et al. 2022</em></li>
+  </ul>
+
+  <h3 style="color:var(--orange);">⭐ 핵심 선행 논문 — Lim et al., Nat Commun 2025</h3>
+  <div class="box box-key">
+    <div class="box-title">본 연구그룹이 이미 밝혀낸 것</div>
+    <ul style="margin:0; padding-left:20px;">
+      <li>석문호흡 장기 훈련자 (n=20) vs 대조군 (n=25)에서 실시간 velocity-encoding MRI로 CSF 이동 측정</li>
+      <li>심호흡 시 두 군 모두 CSF 변위·순방향 유량 증가 → 기계적 경로(정맥 귀환) + 자율신경 경로(심박수 조절) 두 가지 메커니즘 규명</li>
+      <li><strong>결정적: 훈련자는 평상시 자유 호흡 중에도 대조군보다 CSF 평균속도·변위·순방향 유량이 유의미하게 높음</strong></li>
+      <li>흡기 길이(inhale length)와 횡격막 이동 거리가 CSF 이동의 가장 강력한 예측 변수</li>
+    </ul>
+  </div>
+
+  <div class="box box-warn">
+    <div class="box-title">그러나 Lim et al. 2025가 답하지 못한 것</div>
+    <p style="margin:0;">
+      Lim et al. 2025는 <strong>"입력 구동력(CSF pump)"이 훈련자에서 우월하다</strong>는 것을 보여줬다.
+      그러나 그 우월한 펌프가 실제로 <strong>"결과물(뇌 청소 효과)"을 만들어내고 있는가</strong>는 전혀 측정하지 않았다.
+      아밀로이드 PET, FDG PET, 혈액 바이오마커, 수면, 인지 — 아무것도 없다.
+      <strong>펌프의 우월성을 증명했지만, 탱크가 덜 찼는지는 보지 않은 것이다.</strong>
+    </p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 1. Research Gap 분석 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--red);">
+    <span>🔴</span> Research Gap 분석 — 무엇이 아직 모르는가
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 1 — 인과 사슬의 하류(downstream)가 비어 있다</div>
+    <p>
+      호흡 훈련 → CSF 흐름 증가 (Lim et al. 2025에서 증명) →
+      <strong style="color:var(--red);">??? → ??? → ???</strong> → 뇌 건강 보존.
+    </p>
+    <p>
+      "더 잘 도는 CSF가 실제로 더 많은 아밀로이드를 청소하는가?"
+      "그 청소의 누적 결과가 PET에서 측정 가능한 아밀로이드 감소로 나타나는가?"
+      <strong>이 질문에 답한 연구는 현재 세계에 단 한 편도 없다.</strong>
+    </p>
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 2 — State vs. Trait 문제가 완전히 해결되지 않았다</div>
+    <p>
+      Lim et al. 2025가 자유 호흡 중에도 차이를 보인 것은 강력한 단서지만,
+      이것은 여전히 MRI 스캐너 안에서의 측정이다. <strong>일상생활에서 훈련자들이 실제로 다르게 호흡하고 자는가?</strong>
+      7일간의 웨어러블 측정 없이는 "일상적 글림패틱 활성도의 차이"라고 주장할 수 없다.
+      MRI 당일의 호흡 패턴이 평소와 같다는 보장이 없다.
+    </p>
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 3 — 60~79세 고위험군에서의 연구가 없다</div>
+    <p>
+      Lim et al. 2025의 평균 연령은 49~58세다.
+      글림패틱 기능 저하와 아밀로이드 축적이 가장 임상적으로 의미 있게 진행되는 시기는
+      <strong>60~79세</strong>다 — AD 전임상기·경도인지장애로의 전환이 이 시기에 집중된다.
+      이 연령대에서 호흡 훈련의 보호 효과를 측정한 연구는 없다.
+    </p>
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 4 — 수면이 매개 변수로 검증된 적이 없다</div>
+    <p>
+      글림패틱은 낮 (호흡 구동)과 밤 (수면·vasomotion 구동) 두 채널로 모두 작동한다.
+      석문호흡 훈련이 낮의 채널을 개선한다는 증거는 있다 (Lim et al.).
+      그러나 <strong>밤의 채널 — 즉 수면 질(SWS 비율), 야간 HRV, 수면 중 호흡 패턴 — 에 미치는 영향은 검증되지 않았다.</strong>
+      "수면 질 개선"이 연구 효과의 주된 매개 경로일 수도 있다.
+    </p>
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 5 — 다차원 통합 모델이 없다</div>
+    <p>
+      지금까지의 연구들은 각 모달리티를 개별적으로 연구했다.
+      CSF 흐름은 PC-MRI로, 아밀로이드는 PET으로, 수면은 PSG로, 바이오마커는 혈액으로 — 그러나
+      <strong>이 모두를 한 코호트에서 동시에 측정하고 변수 간 인과 연결망을 검증한 연구는 없다.</strong>
+      호흡 훈련 → CSF 흐름 → 아밀로이드 청소 → 신경 보존 → 인지 보호라는 전체 사슬이
+      통합적으로 보인 연구가 세계적으로 존재하지 않는다.
+    </p>
+  </div>
+
+  <div class="box box-gap">
+    <div class="box-title">Gap 6 — 비약이 아닌가? 교란 변수 통제의 공백</div>
+    <p>
+      모든 기존 연구에서 중요한 한계: <strong>APOE 유전형, 신체 활동량, 심혈관 건강을 동시에 통제한 연구가 없다.</strong>
+      훈련자들이 건강하기 때문에 훈련을 선택한 것인지, 훈련 때문에 건강해진 것인지 — 이 혼재를
+      부분적이라도 해결하기 위한 설계가 필요하다.
+    </p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 2. 연구 필요성 — Why Now, Why This -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--orange);">
+    <span>🔥</span> 연구의 필요성 — Why Now? Why This?
+  </div>
+
+  <p>연구 필요성을 단순히 "AD가 문제다"로 주장하면 Reviewer가 무시한다. <strong>왜 지금, 왜 이 접근법인지를 선행 연구의 흐름 위에 정확히 올려놓아야 한다.</strong></p>
+
+  <div class="logic-flow">
+
+    <div class="logic-item">
+      <div class="logic-num">1</div>
+      <div class="logic-body">
+        <div class="logic-title">알츠하이머병의 근본 문제는 "청소 실패"다</div>
+        <p>FDA가 승인한 amyloid-targeting therapeutics (lecanemab, donanemab)조차 약 35%의 인지 저하 지연에 그치며 부작용이 상당하다. 발병 후 치료보다 <strong>청소 기능을 유지하여 축적 자체를 막는 예방적 접근</strong>이 더 효율적이라는 컨센서스가 강화되고 있다.</p>
+      </div>
+    </div>
+
+    <div class="logic-item">
+      <div class="logic-num">2</div>
+      <div class="logic-body">
+        <div class="logic-title">글림패틱이 예방 표적이 될 수 있음이 기초 연구에서 확립됐다</div>
+        <p>AQP4 KO 마우스에서 Aβ 청소 65% 감소, 수면 박탈 시 Aβ 축적 가속, 메닝기알 림프관 기능 회복 시 AD 표현형 개선 — 기초 증거는 충분하다. 문제는 <strong>인간에서, 비침습적으로, 글림패틱을 강화할 수 있는 방법론이 아직 없다</strong>는 것이다.</p>
+      </div>
+    </div>
+
+    <div class="logic-item">
+      <div class="logic-num">3</div>
+      <div class="logic-body">
+        <div class="logic-title">호흡 훈련이 유일하게 각성 상태의 글림패틱 구동력을 직접 조절한다</div>
+        <p>수면, 운동, 약물 모두 글림패틱에 영향을 주지만, <strong>호흡 패턴은 의식적 훈련으로 직접 바꿀 수 있는 유일한 생리적 구동력</strong>이다. 그리고 Lim et al. 2025가 바로 이것을 처음으로 인간에서 증명했다.</p>
+      </div>
+    </div>
+
+    <div class="logic-item">
+      <div class="logic-num">4</div>
+      <div class="logic-body">
+        <div class="logic-title">그러나 "더 잘 도는 펌프가 실제로 덜 찬 탱크를 만드는가"는 아직 증명되지 않았다</div>
+        <p>이것이 본 연구가 존재해야 하는 이유다. Lim et al. 2025가 필드에 "가능성의 문"을 열었다면, <strong>본 연구는 그 문을 통과하여 실제 임상적 결과물이 있는지 확인하는 최초의 연구</strong>다.</p>
+      </div>
+    </div>
+
+    <div class="logic-item">
+      <div class="logic-num">5</div>
+      <div class="logic-body">
+        <div class="logic-title">60~79세 타이밍이 핵심이다 — 예방 윈도우의 마지막 기회</div>
+        <p>아밀로이드 PET 양성률은 60대 ~20%, 70대 ~35%로 급증한다. 이미 플라크가 광범위하게 형성된 이후에는 글림패틱 개선의 효과가 제한적이다. <strong>축적이 시작되었지만 아직 진행 중인 이 시기에 개입 효과를 측정하는 것이 예방 의학적으로 최적의 타이밍</strong>이다.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="box box-key">
+    <div class="box-title">한 문장으로 요약한 연구 필요성</div>
+    <p style="font-size:1.05rem; font-weight:700; margin:0;">
+      "Lim et al.(2025)이 호흡 훈련자의 CSF 펌프 우월성을 증명한 지금, 다음 필수 질문은
+      '그 우월한 펌프가 실제로 60~79세 노인의 뇌를 더 깨끗하게 유지하는가'이며,
+      이를 멀티모달 영상-바이오마커-웨어러블로 처음으로 검증하는 것이 본 연구의 존재 이유다."
+    </p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 3. 핵심 가설 3가지 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--accent);">
+    <span>💡</span> 핵심 가설 3가지 — Nat Commun 급 논리
+  </div>
+
+  <p>가설은 <strong>측정 가능하고, 반증 가능하고, 기존 문헌에 근거해야 한다.</strong> 비약이 아니라 Gap을 채우는 논리적 다음 단계여야 한다.</p>
+
+  <div class="hypo-cards">
+
+    <div class="hypo hypo-1">
+      <div class="hypo-num">가설 1 — CSF 동역학 (Trait Effect)</div>
+      <div class="hypo-title">호흡 훈련은 각성 상태 글림패틱 구동력을 생리적으로 리모델링한다</div>
+      <div class="hypo-body">
+        <p>60~79세 석문호흡 전문가군은, 실험실 내 심호흡 지시 없이도(<strong>자유 호흡 조건</strong>에서도), 대조군보다 PC-MRI CSF 순방향 유량·변위가 유의미하게 높다. 이 차이는 7일 웨어러블의 일상 호흡 지표(흡기 길이, 호흡 속도)와 유의미하게 상관한다.</p>
+        <hr style="border:none;border-top:1px solid rgba(79,156,249,.3); margin:12px 0;">
+        <p style="font-size:0.82rem;"><strong>측정:</strong> PC-MRI (자유호흡 세션) + mobiCARE 7일 호흡 지표<br>
+        <strong>핵심:</strong> "MRI 당일만 다른 것이 아니라 평소에도 다르다" — Trait 증명<br>
+        <strong>선행 근거:</strong> Lim et al. 2025 (자유 호흡 중 차이 첫 관찰), Burman 2023 (복식 호흡의 CSF 효과)</p>
+      </div>
+    </div>
+
+    <div class="hypo hypo-2">
+      <div class="hypo-num">가설 2 — 누적 청소 결과 (Long-term Output)</div>
+      <div class="hypo-title">수십 년간의 우월한 글림패틱 구동은 뇌 아밀로이드 축적을 억제한다</div>
+      <div class="hypo-body">
+        <p>석문호흡 전문가군은 대조군 대비 <strong>Florbetaben PET Centiloid 값이 유의미하게 낮으며</strong>, CSF 순방향 유량(PC-MRI)과 아밀로이드 부하(PET SUVR)는 음의 상관관계를 보인다. 훈련 기간이 길수록 아밀로이드 부하가 낮은 용량-반응 관계가 관찰된다.</p>
+        <hr style="border:none;border-top:1px solid rgba(167,139,250,.3); margin:12px 0;">
+        <p style="font-size:0.82rem;"><strong>측정:</strong> Florbetaben PET (Centiloid, SUVR) + 훈련 기간<br>
+        <strong>핵심:</strong> "펌프가 좋으면 탱크도 덜 찬다" — 세계 최초 직접 연결<br>
+        <strong>선행 근거:</strong> 글림패틱-Aβ 청소 기전 (Iliff 2012), 수면-아밀로이드 관계 (Wafford 2021)</p>
+      </div>
+    </div>
+
+    <div class="hypo hypo-3">
+      <div class="hypo-num">가설 3 — 수면 매개 경로 (Nocturnal Mechanism)</div>
+      <div class="hypo-title">수면 질 개선이 호흡 훈련과 뇌 건강 보존 사이의 중요한 매개 변수다</div>
+      <div class="hypo-body">
+        <p>훈련자들은 mobiCARE 기반으로 더 높은 SWS 비율, 더 낮은 야간 호흡 속도, 더 높은 야간 HRV를 보이며, 이 수면 지표들은 아밀로이드 부하 감소(PET)와 FDG 대사 보존 및 NfL/GFAP 감소를 <strong>부분 매개(partial mediation)</strong>한다.</p>
+        <hr style="border:none;border-top:1px solid rgba(45,212,191,.3); margin:12px 0;">
+        <p style="font-size:0.82rem;"><strong>측정:</strong> mobiCARE (SWS, HRV, 호흡속도) + 매개 분석<br>
+        <strong>핵심:</strong> 낮(호흡) + 밤(수면) 24시간 글림패틱 시너지 모델<br>
+        <strong>선행 근거:</strong> Helakari 2022 (NREM 중 호흡 박동 증가), Burman 2023 (수면 중 CSF 독소 청소)</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="box box-info" style="margin-top:24px;">
+    <div class="box-title">3가지 가설이 Nat Commun 급인 이유</div>
+    <ul style="margin:0; padding-left:20px;">
+      <li><strong>가설 1</strong> — Lim et al. 2025를 60~79세·일상 측정으로 확장·복제. Trait 효과에 mobiCARE 근거 추가.</li>
+      <li><strong>가설 2</strong> — 세계 최초. "호흡 훈련 → 아밀로이드 감소" 직접 연결. 단면 연구임에도 용량-반응이 있으면 인과 추론 강도 ↑.</li>
+      <li><strong>가설 3</strong> — 24시간 통합 기전 모델. 기존 연구들이 낮 또는 밤을 개별로 봤다면, 이 연구는 두 채널을 동시에 모델링한 최초.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 4. 인과 사슬과 연구 내러티브 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--green);">
+    <span>🔗</span> 인과 사슬 — 연구가 검증할 메커니즘 경로
+  </div>
+
+  <p>이 사슬이 논문의 Introduction → Results → Discussion의 뼈대다. <strong>각 화살표마다 대응하는 측정 지표가 있어야 한다.</strong> 허점이 있는 화살표가 Reviewer의 공격 지점이 된다.</p>
+
+  <div class="chain">
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--orange);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--orange);">① 석문호흡 장기 훈련</div>
+        <div class="chain-sub">측정: 훈련 기간(년), 훈련 주당 시간 — 용량-반응 분석용 변수</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:#fb923c;"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:#fb923c;">② 복식호흡 패턴 강화 (Trait 호흡 리모델링)</div>
+        <div class="chain-sub">측정: mobiCARE 7일 흡기 길이, 호흡 속도, 횡격막 이동 (자가 보고 + 웨어러블)</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--accent);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--accent);">③ 각성 중 CSF 순방향 유량 증가</div>
+        <div class="chain-sub">측정: PC-MRI — 자유 호흡 세션 net flow, mean velocity, displacement</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--purple);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--purple);">④ 자율신경 균형 개선 (미주신경 활성 ↑)</div>
+        <div class="chain-sub">측정: mobiCARE HRV (RMSSD, LF/HF) — 낮·밤 분리 분석</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--teal);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--teal);">⑤ 수면 질 개선 (SWS ↑, 야간 복식호흡 ↑)</div>
+        <div class="chain-sub">측정: mobiCARE 수면 단계, 야간 호흡 속도, 야간 HRV — 가설 3 매개 변수</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--green);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--green);">⑥ 24시간 글림패틱 활성 극대화</div>
+        <div class="chain-sub">낮: 호흡 구동 CSF 흐름 / 밤: 수면·vasomotion 구동 CSF 흐름 — 두 채널 동시 강화</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:#a78bfa;"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:#a78bfa;">⑦ 아밀로이드 청소 효율 증가 (수십 년 누적)</div>
+        <div class="chain-sub">측정: Florbetaben PET — Centiloid, SUVR / 훈련 기간과 용량-반응 분석</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--orange);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--orange);">⑧ 뉴런 대사 보존</div>
+        <div class="chain-sub">측정: FDG PET — 쐐기앞소엽, 후측 대상회, 두정엽 SUVR (AD 취약 영역)</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--red);"></div><div class="chain-line"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--red);">⑨ 신경손상 감소 / 성상교세포 스트레스 감소</div>
+        <div class="chain-sub">측정: 혈액 NfL (뉴런 손상 지표), GFAP (성상교세포 활성화 지표)</div>
+      </div>
+    </div>
+    <div class="chain-item">
+      <div class="chain-left"><div class="chain-dot" style="background:var(--green);"></div></div>
+      <div class="chain-body">
+        <div class="chain-step" style="color:var(--green);">⑩ 인지 기능 보존</div>
+        <div class="chain-sub">측정: 표준화 신경인지 배터리 (기억, 처리속도, 실행기능) — 상관 분석용</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box box-warn" style="margin-top:24px;">
+    <div class="box-title">⚠️ 사슬에서 가장 취약한 연결 — 미리 인식하고 방어해야 한다</div>
+    <p><strong>③→⑦ 화살표 (CSF 흐름 → 아밀로이드 감소):</strong> 이것이 연구의 가장 새롭고 동시에 가장 취약한 연결이다. "CSF가 잘 돈다고 해서 반드시 아밀로이드가 덜 쌓이는 것은 아니지 않냐"는 반론에 대한 준비가 필요하다.
+    방어 논리: (1) 기초 연구에서 AQP4 KO 마우스의 글림패틱 저하가 Aβ 축적 가속과 직접 연결됨 (Iliff 2012). (2) 수면 박탈 → CSF 흐름 감소 → Aβ 축적 가속이 인간 연구에서도 보임 (Xie 2013). (3) 따라서 역방향(CSF 흐름 개선 → Aβ 축적 감소)도 성립 가능하다는 논리. (4) 단면 연구이므로 인과를 주장하지 않고 "연관성(association)"을 보고하며, 기전적 가능성을 제시한다.</p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 5. State vs. Trait 문제 — 완전한 해결 전략 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--yellow);">
+    <span>⚖️</span> State vs. Trait 문제 — 지도교수 지적의 완전한 해결
+  </div>
+
+  <p>이 문제는 단순히 PC-MRI 세션을 두 개로 나누는 것만으로 해결되지 않는다. <strong>Trait 효과를 삼중으로 증거해야 한다.</strong></p>
+
+  <table>
+    <tr>
+      <th>증거 수준</th>
+      <th>측정 방법</th>
+      <th>주장 가능 내용</th>
+      <th>한계</th>
+    </tr>
+    <tr>
+      <td><strong>Level 1 — MRI 내 자유 호흡</strong></td>
+      <td>PC-MRI 자유 호흡 세션 군간 차이</td>
+      <td>"MRI 당일 지시 없는 조건에서도 차이 → State 효과만으로 설명 불가"</td>
+      <td>MRI 당일 상태가 평소를 대표하는가?</td>
+    </tr>
+    <tr>
+      <td><strong>Level 2 — 일상 호흡 (웨어러블)</strong></td>
+      <td>mobiCARE 7일 호흡 속도·깊이·HRV</td>
+      <td>"일상에서도 훈련자는 다르게 호흡하고 자율신경 반응이 다르다"</td>
+      <td>호흡 센서의 정밀도, 수면 단계 정확도</td>
+    </tr>
+    <tr>
+      <td><strong>Level 3 — 누적 결과 (PET)</strong></td>
+      <td>Florbetaben PET 아밀로이드 축적량</td>
+      <td>"수십 년간의 누적 청소 효율 차이 — 단 한 번의 State 효과로 만들 수 없다"</td>
+      <td>단면 연구 특성상 인과 방향 불확실</td>
+    </tr>
+    <tr>
+      <td><strong>Level 4 — 용량-반응</strong></td>
+      <td>훈련 기간(년) × 모든 지표</td>
+      <td>"훈련 기간이 길수록 효과가 크다 → 축적 효과의 증거"</td>
+      <td>훈련 강도·규칙성의 개인차</td>
+    </tr>
+  </table>
+
+  <div class="box box-purp">
+    <div class="box-title">Trait 효과의 가장 강력한 증거 — Florbetaben PET</div>
+    <p>
+      아밀로이드 플라크는 수년~수십 년에 걸쳐 형성된다. 어떤 순간의 State 효과로도 만들거나 지울 수 없다.
+      따라서 "훈련자의 아밀로이드 부하가 대조군보다 낮다"는 Florbetaben PET 결과는,
+      <strong>그 자체로 Trait 효과의 가장 강력한 장기 생물학적 증거</strong>가 된다.
+      PC-MRI에서 자유 호흡 중에도 차이가 있다면, 이것이 PET의 누적 결과와 상관한다는 것을 보이면
+      "State vs. Trait" 논쟁을 단계적으로 완전히 봉쇄할 수 있다.
+    </p>
+  </div>
+
+  <h3>PC-MRI 프로토콜 권고 — 3세션 설계</h3>
+  <table>
+    <tr><th>세션</th><th>조건</th><th>지속시간</th><th>측정 목적</th></tr>
+    <tr>
+      <td><strong>Session A</strong></td>
+      <td>자유 호흡 (지시 없음)</td>
+      <td>5분</td>
+      <td><span class="td-green">Trait 효과 측정</span> — 군간 차이 = Trait</td>
+    </tr>
+    <tr>
+      <td><strong>Session B</strong></td>
+      <td>가이드 복식 심호흡</td>
+      <td>5분</td>
+      <td>State + Trait 합산 / 군 내 급성 효과 측정</td>
+    </tr>
+    <tr>
+      <td><strong>Session C</strong></td>
+      <td>자유 호흡 (회복 후)</td>
+      <td>5분</td>
+      <td>Post-session 지속 효과 / 재현성 검증</td>
+    </tr>
+  </table>
+  <p style="font-size:0.88rem; color:var(--text2);">
+    순수 State 효과 = (Session B - Session A) 내 군간 차이 / 순수 Trait 효과 = Session A 군간 차이 /
+    Session C = Session A와의 비교로 session carryover 검증
+  </p>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 6. 통제해야 할 교란 변수 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--red);">
+    <span>🛡️</span> 반드시 통제해야 할 교란 변수 — Reviewer 방어 목록
+  </div>
+
+  <div class="critical-banner">
+    <h4>🚨 가장 치명적 교란 변수 — APOE ε4 유전형</h4>
+    <p>APOE ε4 보유자는 훈련 여부와 무관하게 아밀로이드 축적이 가속화된다. 만약 두 군에서 ε4 보유 비율이 다르다면, Florbetaben PET의 모든 군간 차이는 유전 요인으로 설명될 수 있다. <strong>APOE 유전형 측정은 선택이 아닌 필수다. 통계 분석 시 공변량으로 반드시 포함하거나, ε4 유무에 따른 층화 분석을 수행해야 한다.</strong></p>
+  </div>
+
+  <table>
+    <tr><th>교란 변수</th><th>영향받는 지표</th><th>통제 방법</th><th>중요도</th></tr>
+    <tr><td><strong>APOE ε4 유전형</strong></td><td>Florbetaben PET, FDG PET</td><td>유전자 검사 + 공변량/층화</td><td class="td-red">🚨 최우선</td></tr>
+    <tr><td><strong>신체 활동량</strong></td><td>CSF 흐름, HRV, 아밀로이드</td><td>IPAQ 또는 mobiCARE 활동량 + 공변량</td><td class="td-red">매우 높음</td></tr>
+    <tr><td><strong>연령 (60~79세 내)</strong></td><td>모든 지표</td><td>공변량 포함, 연령 매칭</td><td class="td-red">매우 높음</td></tr>
+    <tr><td><strong>교육 수준</strong></td><td>인지검사</td><td>교육년수 + 공변량</td><td>높음</td></tr>
+    <tr><td><strong>BMI</strong></td><td>HRV, 호흡, 아밀로이드</td><td>공변량 포함</td><td>높음</td></tr>
+    <tr><td><strong>수면 장애 (OSA)</strong></td><td>수면 지표, 아밀로이드</td><td>제외 기준 (중증 OSA) 또는 공변량</td><td>높음</td></tr>
+    <tr><td><strong>당뇨/혈당</strong></td><td>FDG PET</td><td>제외 기준 또는 혈당 측정 후 보정</td><td>높음</td></tr>
+    <tr><td><strong>심혈관 약물</strong></td><td>HRV, 혈압, CSF 흐름</td><td>약물 목록 수집 + 공변량</td><td>높음</td></tr>
+    <tr><td><strong>성별</strong></td><td>글림패틱 기능 (성차 존재)</td><td>군간 성별 비율 균형 + 공변량</td><td>중간</td></tr>
+    <tr><td><strong>음주량</strong></td><td>글림패틱 (알코올 억제 효과)</td><td>AUDIT 설문 + 공변량</td><td>중간</td></tr>
+    <tr><td><strong>혈압</strong></td><td>CSF 박동성, 혈관 경직도</td><td>측정 + 공변량</td><td>중간</td></tr>
+    <tr><td><strong>혈당 (FDG PET 당일)</strong></td><td>FDG 흡수율</td><td>프로토콜 표준화 (금식, 혈당 측정)</td><td>중간</td></tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 7. 연구 vs 선행 비교 — "우리 연구의 차별성" -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--teal);">
+    <span>📊</span> 선행 연구 vs 본 연구 — 명확한 차별성
+  </div>
+
+  <table>
+    <tr>
+      <th>비교 항목</th>
+      <th>Lim et al. 2025<br><small>(Nat Commun)</small></th>
+      <th style="color:var(--green);">RSP_PET (본 연구)</th>
+    </tr>
+    <tr>
+      <td>대상 연령</td>
+      <td>혼합 (~49~58세 평균)</td>
+      <td class="td-green">60~79세 — AD 전임상기 핵심 연령</td>
+    </tr>
+    <tr>
+      <td>글림패틱 측정</td>
+      <td>CSF 흐름 (입력·펌프)</td>
+      <td class="td-green">CSF 흐름 + 아밀로이드 + 대사 + 바이오마커 (입력 + 출력 + 결과)</td>
+    </tr>
+    <tr>
+      <td>일상 호흡 측정</td>
+      <td>없음</td>
+      <td class="td-green">mobiCARE 7일 연속 측정 — Trait의 실생활 근거</td>
+    </tr>
+    <tr>
+      <td>수면 측정</td>
+      <td>없음</td>
+      <td class="td-green">mobiCARE 7일 수면 구조 + 야간 HRV</td>
+    </tr>
+    <tr>
+      <td>뇌 아밀로이드</td>
+      <td>없음</td>
+      <td class="td-green">Florbetaben PET — 세계 최초 연결</td>
+    </tr>
+    <tr>
+      <td>뇌 대사</td>
+      <td>없음</td>
+      <td class="td-green">FDG PET — 신경 건강 상태 통합 지표</td>
+    </tr>
+    <tr>
+      <td>혈액 바이오마커</td>
+      <td>없음</td>
+      <td class="td-green">NfL + GFAP — 신경손상 정량화</td>
+    </tr>
+    <tr>
+      <td>인지 기능</td>
+      <td>없음</td>
+      <td class="td-green">신경인지 배터리 — 최종 임상 outcome</td>
+    </tr>
+    <tr>
+      <td>메커니즘 분리</td>
+      <td>MRI 내 2세션 (자유/심호흡)</td>
+      <td class="td-green">MRI 3세션 + 7일 웨어러블 + PET = 4중 State/Trait 분리</td>
+    </tr>
+    <tr>
+      <td>임상 메시지</td>
+      <td>"호흡이 CSF를 더 잘 돌게 한다"</td>
+      <td class="td-green">"호흡 훈련이 60대 뇌를 실제로 더 젊게 유지한다" — 예방 임상 함의</td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 8. Reviewer 예상 비판과 방어 논리 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--red);">
+    <span>🥊</span> 예상 Reviewer 비판과 방어 논리 — 선제적 대응
+  </div>
+
+  <h3>비판 1 — "단면 연구이므로 인과관계가 없다"</h3>
+  <div class="box box-info">
+    <div class="box-title">방어</div>
+    <p>
+      동의한다. 본 연구는 인과를 주장하지 않고 <strong>연관성(association)과 기전적 가능성(mechanistic plausibility)</strong>을 보고한다.
+      그러나 단면 연구에서도 인과 추론을 강화하는 증거가 있다:
+      (1) <strong>용량-반응 관계</strong> — 훈련 기간이 길수록 효과가 크다면, 선택 편향만으로 설명하기 어렵다.
+      (2) <strong>기전적 일관성</strong> — CSF 흐름 ↑ ↔ 아밀로이드 ↓ ↔ FDG 대사 ↑ ↔ NfL ↓ ↔ 인지 ↑ 의 전체 사슬이 모두 같은 방향으로 일관되게 나타난다면, 우연 또는 혼재 변수만으로 설명하기 어렵다.
+      (3) 본 연구는 향후 <strong>RCT를 위한 근거 생성 연구</strong>로 포지셔닝하며, 이는 단면 연구의 적절한 역할이다.
+    </p>
+  </div>
+
+  <h3>비판 2 — "건강한 사람들이 선택적으로 훈련을 했을 뿐이다 (Self-selection bias)"</h3>
+  <div class="box box-info">
+    <div class="box-title">방어</div>
+    <p>
+      이것이 단면 연구의 근본적 한계다. 부분적 대응책:
+      (1) <strong>Propensity score matching</strong> — 신체 활동, BMI, 교육 수준, 심혈관 건강 지표로 두 군을 최대한 매칭.
+      (2) <strong>APOE 유전형 통제</strong> — 유전적 아밀로이드 위험을 통계적으로 제거.
+      (3) <strong>신체 활동량 공변량 포함</strong> — 운동 자체의 효과를 통제.
+      (4) <strong>가장 강력한 논거: 용량-반응</strong> — 만약 "원래부터 건강했기 때문"이라면, 왜 같은 집단 내에서 훈련 기간이 길수록 CSF 흐름이 더 좋고 아밀로이드가 더 적어야 하는가? 이 패턴은 훈련 자체의 효과를 강하게 시사한다.
+    </p>
+  </div>
+
+  <h3>비판 3 — "글림패틱 시스템의 기전 자체가 아직 논쟁 중이다"</h3>
+  <div class="box box-info">
+    <div class="box-title">방어</div>
+    <p>
+      동의한다 (Mestre et al. 2020, Trends Neurosci). 방어 전략: <strong>논문에서 "글림패틱"을 기전 주장의 중심에 두지 않는다.</strong>
+      대신 측정 지표를 직접 서술한다: "CSF 동역학 향상(PC-MRI)", "뇌 아밀로이드 감소(PET)", "이 두 지표 간의 음의 상관".
+      글림패틱 시스템은 이 연결을 설명하는 <strong>가장 파시모니적인 가설</strong>로 제시하되, Discussion에서 대안적 설명도 다룬다. 데이터는 기전 논쟁과 무관하게 robust하다.
+    </p>
+  </div>
+
+  <h3>비판 4 — "Florbetaben PET 결과가 군간 차이를 보이지 않으면 어떻게 되는가?"</h3>
+  <div class="box box-info">
+    <div class="box-title">방어 (미리 계획)</div>
+    <p>
+      결과가 음성이어도 의미 있는 연구다: (1) PC-MRI의 Trait 효과만 있고 PET 차이가 없다면 → "CSF 흐름 개선이 아밀로이드 축적 경로에 미치는 영향은 생각보다 작거나, 측정 감도 문제일 수 있다 — 향후 종단 연구 필요"는 그 자체로 중요한 부정적 발견. (2) 더 중요한 것: <strong>power calculation을 사전에 명확히 제시</strong>해야 한다. 표본 크기가 충분하지 않아 effect를 detect하지 못하는 상황을 미리 방지해야 한다.
+    </p>
+  </div>
+
+  <h3>비판 5 — "FDG PET은 글림패틱 기능의 지표가 아니다"</h3>
+  <div class="box box-info">
+    <div class="box-title">방어</div>
+    <p>
+      정확히 맞다. FDG PET을 "글림패틱 기능 측정치"로 포지셔닝하면 비판받는다.
+      올바른 프레이밍: FDG PET은 <strong>"글림패틱 기능 저하의 하류 결과(downstream consequence) — 신경 대사 건강"</strong>의 지표다.
+      아밀로이드 축적 → 시냅스 손상 → 뉴런 대사 저하라는 경로에서, FDG PET은 뉴런 건강의 통합 측정치로 작동한다.
+      CSF 흐름 ↔ 아밀로이드 ↔ FDG 대사의 삼각 상관관계가 일관되게 나타날 때 논리가 완성된다.
+    </p>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════ -->
+<!-- 9. 최종 권고 — 연구 설계 요약 -->
+<!-- ════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-title" style="color:var(--green);">
+    <span>🎯</span> 최종 권고 — 연구 설계 요약
+  </div>
+
+  <div class="box box-key">
+    <div class="box-title">Primary Outcome</div>
+    <p><strong>Florbetaben PET Centiloid</strong> — 가장 새롭고, 임상적으로 가장 의미 있는 outcome. 이것을 primary로 선정해야 표본 크기 계산과 연구 포지셔닝이 명확해진다.</p>
+  </div>
+
+  <div class="box box-info">
+    <div class="box-title">Secondary Outcomes (순위)</div>
+    <ol style="margin:0; padding-left:22px;">
+      <li>PC-MRI CSF net flow (자유 호흡 조건) — Trait 효과의 직접 지표</li>
+      <li>FDG PET SUVR (AD-취약 ROI: 쐐기앞소엽, 후측 대상회, 두정엽)</li>
+      <li>혈액 NfL, GFAP (연령 보정 Z-score)</li>
+      <li>mobiCARE SWS 비율, 야간 HRV (RMSSD)</li>
+      <li>신경인지 종합 점수</li>
+    </ol>
+  </div>
+
+  <div class="box box-purp">
+    <div class="box-title">핵심 통계 분석</div>
+    <ol style="margin:0; padding-left:22px;">
+      <li><strong>ANCOVA</strong>: 전체 outcome 군간 비교 (APOE, 연령, 신체활동, BMI 공변량)</li>
+      <li><strong>Partial correlation</strong>: PC-MRI net flow ↔ Florbetaben SUVR (APOE, 연령 통제 후)</li>
+      <li><strong>Mediation analysis (Baron-Kenny or PROCESS)</strong>: 훈련 → mobiCARE 수면지표 → 아밀로이드</li>
+      <li><strong>Dose-response regression</strong>: 훈련 기간(년) × 각 outcome</li>
+      <li><strong>State vs. Trait decomposition</strong>: Session A·B·C 간 contrast 분석</li>
+    </ol>
+  </div>
+
+  <div class="box box-teal">
+    <div class="box-title">표본 크기 — Power Analysis 방향</div>
+    <p>
+      Primary outcome (Florbetaben PET Centiloid)을 기준으로 계산해야 한다.
+      운동 중재 연구에서 보고된 아밀로이드 효과 크기 (Cohen's d ~0.5~0.7)와
+      유사 연령대 아밀로이드 PET 연구의 분산을 참고하여,
+      α=0.05, power=0.80 기준 <strong>군당 최소 30~40명</strong>이 필요할 것으로 예상된다.
+      APOE ε4 보유자 비율이 예상보다 높으면 층화 분석을 위해 각 군을 충분히 확보해야 한다.
+      최종 계산은 pilot data 또는 문헌 기반으로 Lim et al. 2025와 기존 아밀로이드 PET 연구의 variance 사용.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <div class="box box-key" style="margin-top:24px;">
+    <div class="box-title">Nat Commun 투고 시 Core Message (한 문장)</div>
+    <p style="font-size:1.1rem; font-weight:700; margin:0; line-height:1.7;">
+      "수십 년간의 석문호흡 훈련은 60~79세 성인에서 각성 중 CSF 동역학 향상(PC-MRI), 뇌 아밀로이드 부하 감소(Florbetaben PET), 포도당 대사 보존(FDG PET), 혈액 신경손상 마커 감소(NfL, GFAP)와 유의미하게 연관되며, 이 효과는 수면 질 개선(mobiCARE) 에 의해 부분 매개된다 — 호흡 기반 비약리적 뇌 청소 강화 전략의 첫 번째 임상 증거."
+    </p>
+  </div>
+</div>
+
+
+</div><!-- /container -->
+
+<div class="footer">
+  RSP_PET Project — Task 2 연구 설계 분석 | 작성: AI 지도교수 어드바이저 | 2026-06-04
+</div>
+
+</body>
+</html>

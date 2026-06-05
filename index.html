@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="RSP_PET 연구 허브 — 석문호흡과 글림패틱 시스템">
+<title>RSP_expert | 석문호흡-글림패틱 연구</title>
+<style>
+/* ── 공통 변수 ── */
+:root{
+  --bg:#0a0d14; --s1:#131720; --s2:#1a1d27; --s3:#22263a;
+  --ac:#4f9cf9; --gr:#3ecf8e; --or:#f5a623; --rd:#e05c5c;
+  --pu:#7c5cbf; --te:#2dd4bf; --ye:#fbbf24;
+  --tx:#e8eaf0; --tx2:#b0b8cc; --bd:#2e3452;
+  --tab-h:52px; --hdr-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.8}
+
+/* ── 헤더 ── */
+.hdr{
+  background:linear-gradient(135deg,#0d1b2a 0%,#1a237e 45%,#311b92 75%,#0d47a1 100%);
+  padding:20px 20px 16px;position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--bd);
+}
+.hdr-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.hdr-title{font-size:1.15rem;font-weight:800;line-height:1.25}
+.hdr-sub{font-size:0.75rem;color:rgba(255,255,255,.55);margin-top:2px}
+.hdr-stats{display:flex;gap:16px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-size:1.4rem;font-weight:800;color:var(--ac)}
+.stat-l{font-size:0.68rem;color:rgba(255,255,255,.45)}
+
+/* ── 탭 바 ── */
+.tab-bar{
+  background:var(--s1);border-bottom:2px solid var(--bd);
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  position:sticky;top:var(--hdr-h);z-index:99;
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tabs{display:flex;min-width:max-content;padding:0 12px}
+.tab{
+  padding:0 18px;height:var(--tab-h);display:flex;align-items:center;gap:7px;
+  font-size:0.9rem;font-weight:600;white-space:nowrap;cursor:pointer;
+  border-bottom:3px solid transparent;color:var(--tx2);transition:all .2s;
+  background:none;border-top:none;border-left:none;border-right:none;
+  user-select:none;
+}
+.tab:hover{color:var(--tx)}
+.tab.active{color:var(--ac);border-bottom-color:var(--ac)}
+.tab .t-icon{font-size:1.05rem}
+
+/* ── 패널 ── */
+.panels{max-width:1100px;margin:0 auto;padding:28px 16px 60px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* ── 공통 섹션 카드 ── */
+.sec{background:var(--s1);border:1.5px solid var(--bd);border-radius:14px;padding:26px 24px;margin-bottom:24px}
+.sec-t{font-size:1.2rem;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+h3{font-size:1.05rem;font-weight:700;margin:22px 0 10px;color:var(--tx)}
+h4{font-size:0.95rem;font-weight:700;margin:14px 0 8px;color:var(--or)}
+p{margin-bottom:12px;font-size:0.95rem}
+ul{padding-left:20px;margin-bottom:12px}
+li{margin-bottom:6px;font-size:0.95rem}
+strong{color:var(--tx)}
+
+/* ── 강조 박스 ── */
+.box{border-radius:10px;padding:16px 20px;margin:16px 0;border-left:5px solid}
+.box p,.box li{font-size:0.9rem}
+.box.key{background:rgba(62,207,142,.07);border-color:var(--gr)}
+.box.info{background:rgba(79,156,249,.07);border-color:var(--ac)}
+.box.warn{background:rgba(245,166,35,.07);border-color:var(--or)}
+.box.gap{background:rgba(224,92,92,.07);border-color:var(--rd)}
+.box.pu{background:rgba(124,92,191,.08);border-color:var(--pu)}
+.box.te{background:rgba(45,212,191,.07);border-color:var(--te)}
+.box-t{font-size:0.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.box.key .box-t{color:var(--gr)}
+.box.info .box-t{color:var(--ac)}
+.box.warn .box-t{color:var(--or)}
+.box.gap .box-t{color:var(--rd)}
+.box.pu .box-t{color:var(--pu)}
+.box.te .box-t{color:var(--te)}
+
+/* ── 그리드 ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:14px 0}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* ── 카드 ── */
+.card{background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;padding:18px 16px}
+.card h4{margin-top:0}
+
+/* ── 이론 클러스터 ── */
+.cluster{border-radius:14px;padding:18px 20px;border:2px solid;margin-bottom:16px}
+.cl-brain{border-color:rgba(79,156,249,.4);background:rgba(79,156,249,.04)}
+.cl-breath{border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.04)}
+.cl-imaging{border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.04)}
+.cl-marker{border-color:rgba(224,92,92,.4);background:rgba(224,92,92,.04)}
+.cl-label{font-size:0.82rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.cl-brain .cl-label{color:var(--ac)}
+.cl-breath .cl-label{color:var(--gr)}
+.cl-imaging .cl-label{color:var(--or)}
+.cl-marker .cl-label{color:var(--rd)}
+
+/* ── 이론 카드 ── */
+.tc{background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;padding:15px 14px;
+    text-decoration:none;color:var(--tx);display:block;transition:all .2s}
+.tc:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.cl-brain .tc:hover{border-color:var(--ac)}
+.cl-breath .tc:hover{border-color:var(--gr)}
+.cl-imaging .tc:hover{border-color:var(--or)}
+.cl-marker .tc:hover{border-color:var(--rd)}
+.tc-icon{font-size:1.5rem;margin-bottom:6px}
+.tc-num{font-size:0.72rem;color:var(--tx2);margin-bottom:3px}
+.tc-title{font-size:0.93rem;font-weight:700;margin-bottom:4px}
+.tc-desc{font-size:0.78rem;color:var(--tx2);line-height:1.5}
+
+/* ── 표 ── */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:0.88rem;overflow-x:auto;display:block}
+th{background:var(--s3);color:var(--ac);padding:10px 14px;text-align:left;border-bottom:2px solid var(--bd);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--bd);vertical-align:top}
+tr:hover td{background:rgba(255,255,255,.02)}
+.green{color:var(--gr);font-weight:700}
+.red{color:var(--rd);font-weight:700}
+.orange{color:var(--or);font-weight:700}
+
+/* ── 인과 사슬 ── */
+.chain{padding:8px 0}
+.ci{display:flex;gap:14px;margin-bottom:4px}
+.ci-left{display:flex;flex-direction:column;align-items:center;width:32px;flex-shrink:0}
+.ci-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ci-line{width:2px;flex:1;background:var(--bd);min-height:24px;margin:3px 0}
+.ci-body{padding:8px 0 20px}
+.ci-step{font-weight:700;font-size:1rem;margin-bottom:3px}
+.ci-sub{font-size:0.83rem;color:var(--tx2)}
+
+/* ── 가설 카드 ── */
+.hypo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}
+@media(max-width:750px){.hypo-grid{grid-template-columns:1fr}}
+.hypo{border-radius:12px;padding:20px;border:2px solid}
+.h1{border-color:rgba(79,156,249,.5);background:rgba(79,156,249,.05)}
+.h2{border-color:rgba(124,92,191,.5);background:rgba(124,92,191,.05)}
+.h3{border-color:rgba(45,212,191,.5);background:rgba(45,212,191,.05)}
+.hypo-n{font-size:0.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.h1 .hypo-n{color:var(--ac)}
+.h2 .hypo-n{color:var(--pu)}
+.h3 .hypo-n{color:var(--te)}
+.hypo-t{font-size:1rem;font-weight:800;margin-bottom:8px}
+.hypo-b{font-size:0.85rem;color:var(--tx2);line-height:1.65}
+
+/* ── 태스크 ── */
+.task{background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;
+      padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
+.task-n{background:var(--s3);color:var(--ac);border-radius:7px;padding:4px 10px;
+        font-size:0.8rem;font-weight:700;flex-shrink:0}
+.task-t{font-size:0.95rem;font-weight:700;margin-bottom:3px}
+.task-d{font-size:0.83rem;color:var(--tx2)}
+.ms{margin-left:auto;flex-shrink:0}
+.done{background:rgba(62,207,142,.15);color:var(--gr);padding:3px 10px;border-radius:8px;font-size:0.78rem}
+.pend{background:rgba(245,166,35,.15);color:var(--or);padding:3px 10px;border-radius:8px;font-size:0.78rem}
+
+/* ── 논문 카드 ── */
+.paper{background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;padding:18px;margin-bottom:12px}
+.paper.star{border-color:rgba(245,166,35,.5)}
+.paper-t{font-size:0.95rem;font-weight:700;margin-bottom:5px}
+.paper-m{font-size:0.8rem;color:var(--tx2);margin-bottom:8px}
+.paper-s{font-size:0.85rem;margin-bottom:8px}
+.paper-k{font-size:0.82rem;background:rgba(79,156,249,.08);border:1px solid rgba(79,156,249,.2);
+         border-radius:6px;padding:8px 12px;color:var(--ac)}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.72rem;margin:2px}
+.tg{background:rgba(62,207,142,.1);color:var(--gr)}
+.tb{background:rgba(79,156,249,.1);color:var(--ac)}
+.tr{background:rgba(224,92,92,.1);color:var(--rd)}
+.tp{background:rgba(124,92,191,.1);color:var(--pu)}
+.to{background:rgba(245,166,35,.1);color:var(--or)}
+.doi{color:var(--ac);text-decoration:none;font-size:0.8rem}
+.doi:hover{text-decoration:underline}
+
+/* ── 실험 프로토콜 ── */
+.proto-step{background:var(--s2);border:1.5px solid var(--bd);border-radius:10px;
+            padding:14px 16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start}
+.proto-n{background:var(--ac);color:#000;border-radius:50%;width:32px;height:32px;
+         display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;flex-shrink:0}
+.proto-b{font-size:0.9rem}
+.proto-b strong{display:block;margin-bottom:4px;font-size:0.95rem}
+
+/* ── 미팅 ── */
+.meet-field{margin-bottom:16px}
+.meet-label{font-size:0.82rem;color:var(--tx2);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.meet-input{width:100%;background:var(--s2);border:1.5px solid var(--bd);border-radius:8px;
+            padding:10px 14px;color:var(--tx);font-size:0.9rem;resize:vertical;font-family:inherit}
+.meet-input:focus{outline:none;border-color:var(--ac)}
+.meet-btn{background:var(--ac);color:#000;border:none;border-radius:8px;padding:10px 20px;
+          font-size:0.9rem;font-weight:700;cursor:pointer;margin-top:8px}
+.meet-btn:hover{background:#7bb8ff}
+
+/* ── SVG 다이어그램 ── */
+.diag{background:var(--s2);border:1.5px solid var(--bd);border-radius:12px;padding:20px;margin:16px 0;text-align:center;overflow-x:auto}
+.diag svg{max-width:100%;height:auto}
+.diag-cap{font-size:0.78rem;color:var(--tx2);margin-top:10px;font-style:italic}
+
+/* ── 배너 ── */
+.critical{background:rgba(224,92,92,.1);border:2px solid rgba(224,92,92,.4);border-radius:12px;padding:18px 20px;margin:16px 0}
+.critical h4{color:var(--rd);margin-bottom:6px}
+
+/* ── 탭 색상 액센트 ── */
+.tab.t0.active,.tab.t0:hover{color:#a78bfa;border-bottom-color:#a78bfa}
+.tab.t1.active,.tab.t1:hover{color:var(--ac);border-bottom-color:var(--ac)}
+.tab.t2.active,.tab.t2:hover{color:var(--gr);border-bottom-color:var(--gr)}
+.tab.t3.active,.tab.t3:hover{color:var(--rd);border-bottom-color:var(--rd)}
+.tab.t4.active,.tab.t4:hover{color:var(--te);border-bottom-color:var(--te)}
+.tab.t5.active,.tab.t5:hover{color:var(--ye);border-bottom-color:var(--ye)}
+
+/* ── 스테이터스 바 ── */
+.statusbar{background:rgba(245,166,35,.08);border-bottom:1px solid rgba(245,166,35,.2);
+           padding:9px 20px;font-size:0.85rem;display:flex;align-items:center;gap:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--or);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── footer ── */
+.footer{background:var(--s1);border-top:1px solid var(--bd);padding:18px 20px;text-align:center;font-size:0.8rem;color:var(--tx2)}
+
+/* ── 분리선 ── */
+hr.div{border:none;border-top:1px solid var(--bd);margin:24px 0}
+
+/* ── SVG 다이어그램 스크롤 (작은 화면에서 텍스트 가독성 보장) ── */
+.diag{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.diag svg{min-width:520px}
+
+/* ── 모바일 기본 조정 ── */
+@media(max-width:480px){
+  .hdr{padding:14px 14px 12px}
+  .hdr-title{font-size:0.95rem}
+  .panels{padding:18px 12px 50px}
+  .sec{padding:20px 16px}
+  .tab{padding:0 14px;font-size:0.83rem}
+}
+
+/* ── 모바일 강화 (600px 이하) ── */
+@media(max-width:600px){
+  .hdr-inner{flex-direction:column;align-items:flex-start;gap:8px}
+  .hdr-stats{gap:14px}
+  .stat-n{font-size:1.1rem}
+  .statusbar{font-size:0.78rem;padding:8px 12px;gap:8px}
+  .proto-step{flex-direction:column;gap:8px}
+  .proto-n{align-self:flex-start;margin-top:0}
+  .hypo-t{font-size:0.92rem}
+  .hypo-b{font-size:0.83rem}
+  .paper{padding:14px}
+  .paper-t{font-size:0.9rem}
+  .ci-step{font-size:0.92rem}
+  .ci-sub{font-size:0.8rem}
+  table th,table td{padding:8px 10px;font-size:0.83rem}
+  .box{padding:12px 14px}
+  .card{padding:14px 12px}
+  .tc{padding:12px 11px}
+  .tc-title{font-size:0.88rem}
+  .tc-desc{font-size:0.75rem}
+}
+
+/* ── 초소형 화면 (380px 이하) ── */
+@media(max-width:380px){
+  .hdr-stats{display:none}
+  .sec-t{font-size:1rem}
+  .tabs{padding:0 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ 헤더 ══ -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <div class="hdr-title">🧠 RSP_expert</div>
+      <div class="hdr-sub">석문호흡 × 글림패틱 × 뇌 노화 | 60~79세 코호트</div>
+    </div>
+    <div class="hdr-stats">
+      <div class="stat"><div class="stat-n">6</div><div class="stat-l">모달리티</div></div>
+      <div class="stat"><div class="stat-n">11</div><div class="stat-l">이론 파일</div></div>
+      <div class="stat"><div class="stat-n">20+</div><div class="stat-l">논문</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 상태 바 ══ -->
+<div class="statusbar">
+  <div class="dot"></div>
+  <span><strong>진행 중:</strong> Task 1·2 완료 → Task 3 (실험 설계) 대기 | 핵심 딜레마: State vs. Trait 분리 전략</span>
+</div>
+
+<!-- ══ 탭 바 ══ -->
+<div class="tab-bar">
+  <div class="tabs">
+    <button class="tab t0 active" onclick="switchTab(0)"><span class="t-icon">🏠</span>Overview</button>
+    <button class="tab t1" onclick="switchTab(1)"><span class="t-icon">📚</span>Theory</button>
+    <button class="tab t2" onclick="switchTab(2)"><span class="t-icon">📄</span>Paper</button>
+    <button class="tab t3" onclick="switchTab(3)"><span class="t-icon">🔴</span>Research Gap</button>
+    <button class="tab t4" onclick="switchTab(4)"><span class="t-icon">🔬</span>Experiment</button>
+    <button class="tab t5" onclick="switchTab(5)"><span class="t-icon">📝</span>Meeting</button>
+  </div>
+</div>
+
+<div class="panels">
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 0: OVERVIEW               -->
+<!-- ══════════════════════════════ -->
+<div class="panel active" id="p0">
+
+  <div class="sec">
+    <div class="sec-t" style="color:#a78bfa">🔬 연구 개요</div>
+    <p><strong>연구 제목(가칭):</strong> 장기 석문호흡 훈련이 뇌척수액 흐름 및 글림패틱 시스템, 아밀로이드 축적, 뇌 대사에 미치는 영향 — 60~79세 단면 관찰 연구</p>
+    <p><strong>핵심 선행:</strong> Lim et al., Nature Communications 2025 — 석문호흡 훈련자에서 각성 중 CSF 순방향 유량 우월성 최초 증명</p>
+    <div class="box key">
+      <div class="box-t">본 연구의 핵심 질문</div>
+      <p style="font-size:1rem;font-weight:700;margin:0">"Lim et al.이 펌프(CSF 흐름)가 더 잘 돈다고 증명했다면 — 탱크(아밀로이드)는 실제로 덜 찼는가? 그리고 뇌는 더 건강하게 유지되는가?"</p>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="sec" style="margin-bottom:0">
+      <div class="sec-t" style="color:var(--ac);font-size:1rem">🔬 데이터 모달리티</div>
+      <div class="g2" style="margin-top:0">
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">PC-MRI</div><div style="font-size:0.78rem;color:var(--tx2)">CSF 유속·박동성·순방향 유량</div></div>
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">FDG PET</div><div style="font-size:0.78rem;color:var(--tx2)">뇌 포도당 대사</div></div>
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">Florbetaben PET</div><div style="font-size:0.78rem;color:var(--tx2)">아밀로이드-β 축적</div></div>
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">혈액 마커</div><div style="font-size:0.78rem;color:var(--tx2)">NfL, GFAP</div></div>
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">mobiCARE</div><div style="font-size:0.78rem;color:var(--tx2)">수면·HRV·자율신경 7일</div></div>
+        <div class="card" style="padding:12px"><div style="color:var(--or);font-weight:700;font-size:0.88rem">인지검사</div><div style="font-size:0.78rem;color:var(--tx2)">신경인지 배터리</div></div>
+      </div>
+    </div>
+    <div class="sec" style="margin-bottom:0">
+      <div class="sec-t" style="color:var(--or);font-size:1rem">📋 연구 정보</div>
+      <table style="font-size:0.88rem">
+        <tr><td style="color:var(--tx2);width:42%">연구 설계</td><td><strong>단면 관찰 연구</strong></td></tr>
+        <tr><td style="color:var(--tx2)">대상 연령</td><td><strong>60~79세</strong></td></tr>
+        <tr><td style="color:var(--tx2)">비교군</td><td><strong>석문호흡 전문가 vs 대조군</strong></td></tr>
+        <tr><td style="color:var(--tx2)">목표 저널</td><td><strong>Nature Commun. 급</strong></td></tr>
+        <tr><td style="color:var(--tx2)">Primary Outcome</td><td><strong>Florbetaben PET Centiloid</strong></td></tr>
+        <tr><td style="color:var(--tx2)">표본 크기(예상)</td><td><strong>군당 30~40명</strong></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--gr);font-size:1rem">🎯 Action Items</div>
+    <div class="task"><div class="task-n">T1</div><div><div class="task-t">Literature &amp; Theory 정리</div><div class="task-d">11개 이론 HTML + 논문 DB 완성</div></div><div class="ms"><span class="done">✅ 완료</span></div></div>
+    <div class="task"><div class="task-n">T2</div><div><div class="task-t">Research Gap · 핵심 가설 · 연구 설계</div><div class="task-d">Nat Commun 급 가설 3개 + State/Trait 논리 구조</div></div><div class="ms"><span class="done">✅ 완료</span></div></div>
+    <div class="task"><div class="task-n">T3</div><div><div class="task-t">실험 설계 최적화 (State vs. Trait 분리)</div><div class="task-d">PC-MRI 3세션 프로토콜 + mobiCARE 교차 검증</div></div><div class="ms"><span class="pend">⏳ 대기</span></div></div>
+    <div class="task"><div class="task-n">T4</div><div><div class="task-t">Causal Loop Diagram 구축</div><div class="task-d">PC-MRI ↔ PET ↔ 바이오마커 ↔ 웨어러블 ↔ 인지</div></div><div class="ms"><span class="pend">⏳ 대기</span></div></div>
+  </div>
+
+  <!-- 연결 경로 요약 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--te);font-size:1rem">🔗 예상 인과 경로 (요약)</div>
+    <div class="diag">
+      <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px">
+        <rect width="660" height="200" fill="#1a1d27" rx="10"/>
+        <!-- 노드들 -->
+        <rect x="10" y="75" width="90" height="50" rx="8" fill="rgba(245,166,35,.2)" stroke="#f5a623" stroke-width="1.5"/>
+        <text x="55" y="96" fill="#f5a623" font-size="11" text-anchor="middle" font-weight="bold">석문호흡</text>
+        <text x="55" y="113" fill="#f5a623" font-size="10" text-anchor="middle">장기 훈련</text>
+
+        <rect x="130" y="35" width="90" height="50" rx="8" fill="rgba(79,156,249,.2)" stroke="#4f9cf9" stroke-width="1.5"/>
+        <text x="175" y="56" fill="#4f9cf9" font-size="11" text-anchor="middle" font-weight="bold">복식호흡</text>
+        <text x="175" y="72" fill="#4f9cf9" font-size="10" text-anchor="middle">CSF흐름↑</text>
+
+        <rect x="130" y="115" width="90" height="50" rx="8" fill="rgba(124,92,191,.2)" stroke="#7c5cbf" stroke-width="1.5"/>
+        <text x="175" y="136" fill="#7c5cbf" font-size="11" text-anchor="middle" font-weight="bold">수면 질↑</text>
+        <text x="175" y="152" fill="#7c5cbf" font-size="10" text-anchor="middle">SWS·HRV↑</text>
+
+        <rect x="260" y="75" width="100" height="50" rx="8" fill="rgba(45,212,191,.2)" stroke="#2dd4bf" stroke-width="1.5"/>
+        <text x="310" y="96" fill="#2dd4bf" font-size="11" text-anchor="middle" font-weight="bold">글림패틱</text>
+        <text x="310" y="112" fill="#2dd4bf" font-size="10" text-anchor="middle">24h 활성↑</text>
+
+        <rect x="400" y="20" width="90" height="45" rx="8" fill="rgba(167,139,250,.2)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="445" y="40" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="bold">Amyloid↓</text>
+        <text x="445" y="56" fill="#a78bfa" font-size="10" text-anchor="middle">Florbetaben</text>
+
+        <rect x="400" y="77" width="90" height="45" rx="8" fill="rgba(245,166,35,.2)" stroke="#f5a623" stroke-width="1.5"/>
+        <text x="445" y="97" fill="#f5a623" font-size="11" text-anchor="middle" font-weight="bold">대사 보존↑</text>
+        <text x="445" y="113" fill="#f5a623" font-size="10" text-anchor="middle">FDG PET</text>
+
+        <rect x="400" y="134" width="90" height="45" rx="8" fill="rgba(224,92,92,.2)" stroke="#e05c5c" stroke-width="1.5"/>
+        <text x="445" y="154" fill="#e05c5c" font-size="11" text-anchor="middle" font-weight="bold">NfL/GFAP↓</text>
+        <text x="445" y="170" fill="#e05c5c" font-size="10" text-anchor="middle">혈액 마커</text>
+
+        <rect x="540" y="65" width="105" height="70" rx="8" fill="rgba(62,207,142,.2)" stroke="#3ecf8e" stroke-width="1.5"/>
+        <text x="592" y="90" fill="#3ecf8e" font-size="11" text-anchor="middle" font-weight="bold">인지 보존</text>
+        <text x="592" y="107" fill="#3ecf8e" font-size="10" text-anchor="middle">기억·실행</text>
+        <text x="592" y="123" fill="#3ecf8e" font-size="10" text-anchor="middle">기능 유지</text>
+
+        <!-- 화살표 -->
+        <defs>
+          <marker id="ar" markerWidth="7" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0,7 3,0 6" fill="#9ba3b8"/>
+          </marker>
+        </defs>
+        <!-- 훈련 → 복식호흡 -->
+        <line x1="100" y1="90" x2="128" y2="70" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 훈련 → 수면 -->
+        <line x1="100" y1="110" x2="128" y2="135" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 복식호흡 → 글림패틱 -->
+        <line x1="220" y1="70" x2="258" y2="88" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 수면 → 글림패틱 -->
+        <line x1="220" y1="132" x2="258" y2="112" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 글림패틱 → Amyloid -->
+        <line x1="360" y1="90" x2="398" y2="52" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 글림패틱 → 대사 -->
+        <line x1="360" y1="100" x2="398" y2="100" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- 글림패틱 → NfL -->
+        <line x1="360" y1="110" x2="398" y2="148" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- → 인지 -->
+        <line x1="490" y1="55" x2="538" y2="90" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="490" y1="100" x2="538" y2="100" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+        <line x1="490" y1="155" x2="538" y2="115" stroke="#9ba3b8" stroke-width="1.5" marker-end="url(#ar)"/>
+      </svg>
+      <div class="diag-cap">예상 인과 경로 — 각 화살표마다 대응하는 측정 지표가 있음</div>
+    </div>
+  </div>
+
+</div><!-- /panel 0 -->
+
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 1: THEORY                 -->
+<!-- ══════════════════════════════ -->
+<div class="panel" id="p1">
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--ac)">📚 이론 정리 — 주제별 클러스터</div>
+    <p style="color:var(--tx2);font-size:0.88rem">각 카드를 탭하면 상세 이론 페이지로 이동합니다 (별도 파일)</p>
+
+    <!-- 클러스터 1 -->
+    <div class="cluster cl-brain">
+      <div class="cl-label">🧠 뇌 청소 시스템 — 글림패틱의 구조와 분자적 기반</div>
+      <div class="g3">
+        <a href="01_theory/01_glymphatic_system.html" class="tc" target="_blank">
+          <div class="tc-icon">🧠</div><div class="tc-num">Theory 01</div>
+          <div class="tc-title">글림패틱 시스템</div>
+          <div class="tc-desc">구조·구동력 3가지·아밀로이드 청소·노화 영향·SVG 다이어그램</div>
+        </a>
+        <a href="01_theory/02_csf_basics.html" class="tc" target="_blank">
+          <div class="tc-icon">💧</div><div class="tc-num">Theory 02</div>
+          <div class="tc-title">CSF 기초</div>
+          <div class="tc-desc">생성(맥락총)·순환 경로·흡수(경막 림프관)·정상 참고값</div>
+        </a>
+        <a href="01_theory/08_aqp4_astrocytes.html" class="tc" target="_blank">
+          <div class="tc-icon">🌿</div><div class="tc-num">Theory 08</div>
+          <div class="tc-title">AQP4 / 성상교세포</div>
+          <div class="tc-desc">수채널 분극화·글림패틱 분자 관문·노화 시 탈분극화</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 클러스터 2 -->
+    <div class="cluster cl-breath">
+      <div class="cl-label">🌬️ 호흡 메커니즘 — CSF 이동과 자율신경 조절</div>
+      <div class="g2">
+        <a href="01_theory/03_respiration_csf_mechanism.html" class="tc" target="_blank">
+          <div class="tc-icon">🌬️</div><div class="tc-num">Theory 03 ⭐ 핵심</div>
+          <div class="tc-title">호흡-CSF 메커니즘</div>
+          <div class="tc-desc">기계적·자율신경 두 경로 / Lim et al. 2025 상세 / State vs. Trait 분리 프로토콜</div>
+        </a>
+        <a href="01_theory/11_autonomic_hrv.html" class="tc" target="_blank">
+          <div class="tc-icon">💗</div><div class="tc-num">Theory 11</div>
+          <div class="tc-title">자율신경계 / HRV</div>
+          <div class="tc-desc">미주신경·RSA·HRV 지표·mobiCARE 측정 변수·CSF 연결</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 클러스터 3 -->
+    <div class="cluster cl-imaging">
+      <div class="cl-label">🔬 영상 기법 — 측정 원리와 표준 프로토콜</div>
+      <div class="g3">
+        <a href="01_theory/04_pcmri.html" class="tc" target="_blank">
+          <div class="tc-icon">🔬</div><div class="tc-num">Theory 04</div>
+          <div class="tc-title">Phase-Contrast MRI</div>
+          <div class="tc-desc">VENC 원리·측정 파라미터·실시간 vs ECG-gated·측정 위치별 기여도</div>
+        </a>
+        <a href="01_theory/05_fdg_pet.html" class="tc" target="_blank">
+          <div class="tc-icon">⚡</div><div class="tc-num">Theory 05</div>
+          <div class="tc-title">FDG PET</div>
+          <div class="tc-desc">왜 찍는가·AD 저대사 패턴·표준 프로토콜·본 연구 활용 전략</div>
+        </a>
+        <a href="01_theory/06_florbetaben_pet.html" class="tc" target="_blank">
+          <div class="tc-icon">🔮</div><div class="tc-num">Theory 06</div>
+          <div class="tc-title">Florbetaben PET</div>
+          <div class="tc-desc">아밀로이드 직접 가시화·90분 대기·Centiloid·FDG와 비교</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 클러스터 4 -->
+    <div class="cluster cl-marker">
+      <div class="cl-label">📊 뇌 건강 지표 — 노화·수면·혈액 바이오마커</div>
+      <div class="g3">
+        <a href="01_theory/09_brain_aging.html" class="tc" target="_blank">
+          <div class="tc-icon">🕰️</div><div class="tc-num">Theory 09</div>
+          <div class="tc-title">뇌 노화</div>
+          <div class="tc-desc">AD 연속체 타임라인·APOE 유전형·60~79세 정상 노화 vs 병적 변화</div>
+        </a>
+        <a href="01_theory/07_sleep_glymphatic.html" class="tc" target="_blank">
+          <div class="tc-icon">💤</div><div class="tc-num">Theory 07</div>
+          <div class="tc-title">수면-글림패틱</div>
+          <div class="tc-desc">SWS·느린 복식호흡·야간 청소 기전·mobiCARE 측정 지표</div>
+        </a>
+        <a href="01_theory/10_blood_biomarkers.html" class="tc" target="_blank">
+          <div class="tc-icon">🩸</div><div class="tc-num">Theory 10</div>
+          <div class="tc-title">혈액 바이오마커</div>
+          <div class="tc-desc">NfL·GFAP·Simoa 기술·정상 참고값·본 연구 분석 전략</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /panel 1 -->
+
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 2: PAPER                  -->
+<!-- ══════════════════════════════ -->
+<div class="panel" id="p2">
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--gr)">📄 핵심 선행논문 데이터베이스</div>
+    <p style="font-size:0.83rem;color:var(--tx2)">⚠️ 본 페이지 논문 정보는 PubMed 기반 (According to PubMed). 인용 시 원문 DOI 확인 필수.</p>
+  </div>
+
+  <!-- 연구그룹 핵심 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--or);font-size:1.05rem">⭐ 연구그룹 핵심 선행 논문</div>
+    <div class="paper star">
+      <div class="paper-t">Human cerebrospinal fluid net flow enhanced by respiration during the awake state</div>
+      <div class="paper-m">Lim S, Cogswell PM, et al. | <em>Nature Communications</em> 2025;16(1):11499</div>
+      <div style="margin-bottom:8px"><span class="tag to">⭐ 본 연구그룹</span><span class="tag tb">PC-MRI</span><span class="tag tg">호흡-CSF</span></div>
+      <div class="paper-s"><strong>핵심 결과:</strong> 석문호흡 훈련자(n=20) vs 대조군(n=25). 심호흡 시 CSF 변위 증가. <strong>훈련자는 평상시 자유 호흡 중에도 CSF 평균속도·변위·순방향 유량 유의미하게 ↑.</strong> 흡기 길이·횡격막 이동이 CSF 이동의 가장 강한 예측 변수. 기계적 + 자율신경 두 가지 경로 규명.</div>
+      <div class="paper-k">🎯 본 연구(RSP_PET)의 직접 기반 논문. "CSF 펌프 우월성" 증명. 남은 질문: 아밀로이드(탱크)는 덜 찼는가?</div>
+      <div style="margin-top:10px"><a href="https://doi.org/10.1038/s41467-025-66548-4" target="_blank" class="doi">🔗 DOI: 10.1038/s41467-025-66548-4</a> | PMID: 41390815</div>
+    </div>
+  </div>
+
+  <!-- 글림패틱 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--ac);font-size:1.05rem">🧠 글림패틱 시스템 기초</div>
+    <div class="paper">
+      <div class="paper-t">Fluid transport in the brain</div>
+      <div class="paper-m">Rasmussen MK, Mestre H, Nedergaard M | <em>Physiological Reviews</em> 2021;102(2):1025-1151</div>
+      <div class="paper-s">글림패틱 시스템 가장 포괄적 리뷰. 심장·호흡·혈관운동 세 가지 구동력, AQP4, 수면 의존성, 노화 영향 망라.</div>
+      <a href="https://doi.org/10.1152/physrev.00031.2020" target="_blank" class="doi">🔗 DOI: 10.1152/physrev.00031.2020</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">The Glymphatic System: A Beginner's Guide</div>
+      <div class="paper-m">Jessen NA et al. | <em>Neurochemical Research</em> 2015;40(12):2583-99</div>
+      <div class="paper-s">글림패틱 입문 리뷰. 구조·기능·수면 의존성·노화. 수면 중 ~2배 활성화 데이터.</div>
+      <a href="https://doi.org/10.1007/s11064-015-1581-6" target="_blank" class="doi">🔗 DOI: 10.1007/s11064-015-1581-6</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">The Brain's Glymphatic System: Current Controversies</div>
+      <div class="paper-m">Mestre H, Mori Y, Nedergaard M | <em>Trends Neurosci</em> 2020;43(7):458-466</div>
+      <div class="paper-s">글림패틱 현재 논쟁점 정직하게 정리. 실험적 증거의 강점과 약점 균형 있게 제시. Reviewer 대응 필수.</div>
+      <a href="https://doi.org/10.1016/j.tins.2020.04.003" target="_blank" class="doi">🔗 DOI: 10.1016/j.tins.2020.04.003</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">The Glymphatic System and Waste Clearance with Brain Aging: A Review</div>
+      <div class="paper-m">Benveniste H et al. | <em>Gerontology</em> 2019;65(2):106-119</div>
+      <div class="paper-s">노화에 따른 글림패틱 기능 저하 메커니즘 종합. AQP4 편극화 소실, 동맥 탄성 저하, 수면 구조 변화.</div>
+      <a href="https://doi.org/10.1159/000490349" target="_blank" class="doi">🔗 DOI: 10.1159/000490349</a>
+    </div>
+  </div>
+
+  <!-- 호흡-CSF -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--gr);font-size:1.05rem">🌬️ 호흡과 CSF 흐름</div>
+    <div class="paper">
+      <div class="paper-t">CSF-to-blood toxins clearance is modulated by breathing through cranio-spinal CSF oscillation</div>
+      <div class="paper-m">Burman R, Alperin N | <em>Journal of Sleep Research</em> 2023;33(1):e14029</div>
+      <div class="paper-s">복식 느린 호흡 시 두개-척수 CSF 이동 <strong>56% 증가</strong>. 정맥 귀환 강화 메커니즘. 수면 중 느린 복식호흡이 독소 청소 핵심.</div>
+      <a href="https://doi.org/10.1111/jsr.14029" target="_blank" class="doi">🔗 DOI: 10.1111/jsr.14029</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">Cardiac and respiratory activities induce temporal changes in cerebral blood volume, balanced by a mirror CSF volume displacement</div>
+      <div class="paper-m">Liu P et al. | <em>NeuroImage</em> 2024;305:120988</div>
+      <div class="paper-s">심호흡 시 호흡-구동 CSF 변위 <strong>326% 급증</strong>. 심장 구동 CSF는 23% 감소. 호흡이 심장보다 강력한 CSF 구동력이 됨.</div>
+      <a href="https://doi.org/10.1016/j.neuroimage.2024.120988" target="_blank" class="doi">🔗 DOI: 10.1016/j.neuroimage.2024.120988</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">Human NREM Sleep Promotes Brain-Wide Vasomotor and Respiratory Pulsations</div>
+      <div class="paper-m">Helakari H et al. | <em>J Neurosci</em> 2022;42(12):2503-2515</div>
+      <div class="paper-s">fMRI+EEG로 NREM 수면 중 vasomotion·호흡 박동 강도 증가. 특히 vasomotion 가장 두드러짐. 수면 중 글림패틱 활성화 메커니즘 증거.</div>
+      <a href="https://doi.org/10.1523/JNEUROSCI.0934-21.2022" target="_blank" class="doi">🔗 DOI: 10.1523/JNEUROSCI.0934-21.2022</a>
+    </div>
+  </div>
+
+  <!-- PC-MRI -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--or);font-size:1.05rem">🔬 Phase-Contrast MRI</div>
+    <div class="paper">
+      <div class="paper-t">Glymphatic imaging using MRI</div>
+      <div class="paper-m">Taoka T, Naganawa S | <em>J Magn Reson Imaging</em> 2020;51(1):11-24</div>
+      <div class="paper-s">PC-MRI·DTI-ALPS·가돌리늄 MRI 글림패틱 영상 기법 포괄적 리뷰. 방법론 비교·장단점.</div>
+      <a href="https://doi.org/10.1002/jmri.26892" target="_blank" class="doi">🔗 DOI: 10.1002/jmri.26892</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">Real-time imaging of respiratory effects on cerebrospinal fluid flow in small diameter passageways</div>
+      <div class="paper-m">Töger J et al. | <em>Magn Reson Med</em> 2022;88(2):770-786</div>
+      <div class="paper-s">7T 실시간 PC-MRI로 대뇌수도관 CSF 호흡 효과 정량화. 좋은 반복 측정 신뢰성. 호흡 조건별 net flow 차이.</div>
+      <a href="https://doi.org/10.1002/mrm.29248" target="_blank" class="doi">🔗 DOI: 10.1002/mrm.29248</a>
+    </div>
+  </div>
+
+  <!-- 수면 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--pu);font-size:1.05rem">💤 수면과 글림패틱</div>
+    <div class="paper">
+      <div class="paper-t">Aberrant waste disposal in neurodegeneration: why improved sleep could be the solution</div>
+      <div class="paper-m">Wafford KA | <em>Cereb Circ Cogn Behav</em> 2021;2:100025</div>
+      <div class="paper-s">SWS 감소 → Aβ·tau 축적 촉진. 수면 개선이 신경퇴행 지연 핵심 전략. 수면-글림패틱-AD 악순환 고리.</div>
+      <a href="https://doi.org/10.1016/j.cccb.2021.100025" target="_blank" class="doi">🔗 DOI: 10.1016/j.cccb.2021.100025</a>
+    </div>
+    <div class="paper">
+      <div class="paper-t">Brain washing and neural health: role of age, sleep, and the cerebrospinal fluid melatonin rhythm</div>
+      <div class="paper-m">Reiter RJ et al. | <em>Cell Mol Life Sci</em> 2023;80(4):88</div>
+      <div class="paper-s">CSF 멜라토닌 리듬이 글림패틱·수면에 동시 관여. 노화 시 멜라토닌 저하 = 이중 손실.</div>
+      <a href="https://doi.org/10.1007/s00018-023-04736-5" target="_blank" class="doi">🔗 DOI: 10.1007/s00018-023-04736-5</a>
+    </div>
+  </div>
+
+</div><!-- /panel 2 -->
+
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 3: RESEARCH GAP           -->
+<!-- ══════════════════════════════ -->
+<div class="panel" id="p3">
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--rd)">🔴 Research Gap · 핵심 가설 · 연구 설계</div>
+    <div class="box key">
+      <div class="box-t">필드가 어디까지 왔는가 — 핵심 요약</div>
+      <p><strong>Lim et al. 2025 (Nat Commun):</strong> 석문호흡 훈련자는 평상시 자유 호흡 중에도 CSF 순방향 유량·변위가 대조군보다 유의미하게 높다 → "CSF 펌프 우월성" 최초 증명.</p>
+      <p style="margin-bottom:0"><strong>그러나:</strong> 아밀로이드 PET, FDG PET, 혈액 바이오마커, 수면 측정 없음. <span style="color:var(--rd);font-weight:700">"펌프가 더 잘 돈다"는 보여줬지만, "탱크가 덜 찼는지"는 보지 않았다.</span></p>
+    </div>
+  </div>
+
+  <!-- Research Gaps -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--rd);font-size:1.05rem">🔴 6가지 Research Gap</div>
+
+    <div class="box gap"><div class="box-t">Gap 1 — 인과 사슬의 하류(Downstream)가 비어 있다</div><p>CSF 흐름 증가 → <span style="color:var(--rd)">??? → ??? → ???</span> → 뇌 건강 보존. 아밀로이드 PET·FDG PET·바이오마커로 연결한 연구가 <strong>세계에 단 한 편도 없다.</strong></p></div>
+
+    <div class="box gap"><div class="box-t">Gap 2 — State vs. Trait 문제 미해결</div><p>Lim et al.은 MRI 스캐너 안에서의 차이만 봤다. <strong>일상에서 7일간 훈련자들이 실제로 다르게 호흡하고 자는가?</strong> 웨어러블 없이는 "일상적 글림패틱 활성도 차이"를 주장할 수 없다.</p></div>
+
+    <div class="box gap"><div class="box-t">Gap 3 — 60~79세 고위험군 연구 없음</div><p>Lim et al. 평균 연령 49~58세. <strong>AD 전임상기 아밀로이드 축적이 가장 빠르게 진행되는 60~79세에서의 호흡 훈련 보호 효과</strong>는 미측정.</p></div>
+
+    <div class="box gap"><div class="box-t">Gap 4 — 수면이 매개 변수로 검증된 적 없음</div><p>호흡 훈련이 수면 질(SWS 비율, HRV)을 개선하고, 이것이 야간 글림패틱을 강화한다는 경로 — <strong>mobiCARE 기반 매개 분석(mediation analysis)이 없었다.</strong></p></div>
+
+    <div class="box gap"><div class="box-t">Gap 5 — 다차원 통합 모델 부재</div><p>CSF 흐름 ↔ 아밀로이드 ↔ 대사 ↔ 신경손상 마커 ↔ 인지의 전체 사슬을 <strong>단일 코호트에서 동시 측정한 연구 없음.</strong></p></div>
+
+    <div class="box gap"><div class="box-t">Gap 6 — 교란 변수 통제 공백</div><p>APOE 유전형, 신체 활동량, 심혈관 건강을 동시에 통제한 연구 없음. 선택 편향(self-selection bias) 최소화 설계 필요.</p></div>
+  </div>
+
+  <!-- 연구 필요성 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--or);font-size:1.05rem">🔥 연구 필요성 — Why Now?</div>
+    <div class="box key"><div class="box-t">한 문장 요약</div><p style="font-size:1rem;font-weight:700;margin:0">"Lim et al.(2025)이 호흡 훈련자의 CSF 펌프 우월성을 증명한 지금, 다음 필수 질문은 '그 우월한 펌프가 실제로 60~79세 노인의 뇌를 더 깨끗하게 유지하는가'이며, 이를 멀티모달 영상-바이오마커-웨어러블로 처음으로 검증하는 것이 본 연구의 존재 이유다."</p></div>
+  </div>
+
+  <!-- 핵심 가설 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--ac);font-size:1.05rem">💡 핵심 가설 3가지 (Nat Commun 급)</div>
+    <div class="hypo-grid">
+      <div class="hypo h1">
+        <div class="hypo-n">가설 1 — Trait Effect</div>
+        <div class="hypo-t">호흡 훈련은 각성 중 글림패틱 구동력을 생리적으로 리모델링한다</div>
+        <div class="hypo-b">60~79세 훈련자는 <strong>자유 호흡 조건</strong>에서도 PC-MRI CSF 순방향 유량·변위가 대조군보다 유의미하게 높다. 이 차이는 mobiCARE 7일 호흡 지표(흡기 길이, 호흡 속도)와 상관한다.<br><br>측정: PC-MRI (자유 호흡) + mobiCARE</div>
+      </div>
+      <div class="hypo h2">
+        <div class="hypo-n">가설 2 — Long-term Output ⭐</div>
+        <div class="hypo-t">수십 년의 우월한 글림패틱 구동은 뇌 아밀로이드 축적을 억제한다</div>
+        <div class="hypo-b">훈련자에서 <strong>Florbetaben PET Centiloid 값이 유의미하게 낮으며</strong>, CSF 순방향 유량과 아밀로이드 부하는 음의 상관. 훈련 기간 ↑ → 아밀로이드 ↓ (용량-반응).<br><br>측정: Florbetaben PET + 훈련 기간 × outcome<br><span style="color:#a78bfa">→ 세계 최초 직접 연결</span></div>
+      </div>
+      <div class="hypo h3">
+        <div class="hypo-n">가설 3 — Sleep Mediation</div>
+        <div class="hypo-t">수면 질 개선이 호흡 훈련과 뇌 건강 보존 사이의 중요 매개 변수다</div>
+        <div class="hypo-b">훈련자는 SWS 비율 ↑, 야간 HRV ↑, 야간 호흡 속도 ↓. 이 수면 지표들이 아밀로이드 감소·FDG 대사 보존·NfL/GFAP 감소를 <strong>부분 매개(partial mediation)</strong>한다.<br><br>측정: mobiCARE 7일 + 매개 분석</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 인과 사슬 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--gr);font-size:1.05rem">🔗 연구가 검증할 인과 사슬</div>
+    <p style="font-size:0.85rem;color:var(--tx2)">각 단계마다 대응하는 측정 지표가 있어야 한다. 허점 있는 화살표가 Reviewer 공격 지점이 된다.</p>
+    <div class="chain">
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--or)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--or)">① 석문호흡 장기 훈련</div><div class="ci-sub">측정: 훈련 기간(년), 주당 시간 — 용량-반응 분석 변수</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:#fb923c"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:#fb923c">② 복식호흡 패턴 강화 (Trait 리모델링)</div><div class="ci-sub">측정: mobiCARE 7일 흡기 길이, 호흡 속도</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--ac)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--ac)">③ 각성 중 CSF 순방향 유량 증가</div><div class="ci-sub">측정: PC-MRI 자유 호흡 세션 — net flow, velocity, displacement</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--pu)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--pu)">④ 자율신경 균형 개선 (미주신경 ↑)</div><div class="ci-sub">측정: mobiCARE HRV (RMSSD, LF/HF) — 낮/밤 분리</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--te)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--te)">⑤ 수면 질 개선 (SWS ↑, 야간 복식호흡 ↑)</div><div class="ci-sub">측정: mobiCARE 수면 단계, 야간 HRV — 가설 3 매개 변수</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--gr)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--gr)">⑥ 24시간 글림패틱 활성 극대화</div><div class="ci-sub">낮: 호흡 구동 / 밤: 수면·vasomotion 구동 — 두 채널 동시 강화</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:#a78bfa"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:#a78bfa">⑦ 아밀로이드 청소 효율 증가 (수십 년 누적)</div><div class="ci-sub">측정: Florbetaben PET — Centiloid, SUVR / 훈련 기간 × outcome</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--or)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--or)">⑧ 뉴런 대사 보존</div><div class="ci-sub">측정: FDG PET — 쐐기앞소엽, 후측 대상회, 두정엽 SUVR</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--rd)"></div><div class="ci-line"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--rd)">⑨ 신경손상 / 성상교세포 스트레스 감소</div><div class="ci-sub">측정: 혈액 NfL (뉴런 손상), GFAP (성상교세포 활성화)</div></div></div>
+      <div class="ci"><div class="ci-left"><div class="ci-dot" style="background:var(--gr)"></div></div><div class="ci-body"><div class="ci-step" style="color:var(--gr)">⑩ 인지 기능 보존</div><div class="ci-sub">측정: 신경인지 배터리 (기억, 처리속도, 실행기능)</div></div></div>
+    </div>
+  </div>
+
+  <!-- 교란 변수 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--rd);font-size:1.05rem">🛡️ 반드시 통제할 교란 변수</div>
+    <div class="critical"><h4>🚨 최우선 — APOE ε4 유전형</h4><p>APOE ε4 보유자는 훈련 여부와 무관하게 아밀로이드 축적이 가속화된다. 두 군에서 ε4 비율이 다르면 Florbetaben PET 결과 전체가 흔들린다. <strong>APOE 유전형 측정은 선택 아닌 필수. 공변량 또는 층화 분석 필수.</strong></p></div>
+    <table>
+      <tr><th>교란 변수</th><th>영향받는 지표</th><th>통제 방법</th><th>중요도</th></tr>
+      <tr><td>APOE ε4 유전형</td><td>Florbetaben PET, FDG PET</td><td>유전자 검사 + 공변량/층화</td><td class="red">🚨 최우선</td></tr>
+      <tr><td>신체 활동량</td><td>CSF 흐름, HRV, 아밀로이드</td><td>IPAQ + mobiCARE 활동량</td><td class="red">매우 높음</td></tr>
+      <tr><td>연령 (60~79 내)</td><td>모든 지표</td><td>공변량 포함, 연령 매칭</td><td class="red">매우 높음</td></tr>
+      <tr><td>교육 수준</td><td>인지검사</td><td>교육년수 공변량</td><td class="orange">높음</td></tr>
+      <tr><td>BMI</td><td>HRV, 호흡, 아밀로이드</td><td>공변량 포함</td><td class="orange">높음</td></tr>
+      <tr><td>수면 장애 (OSA)</td><td>수면, 아밀로이드</td><td>중증 OSA 제외 기준</td><td class="orange">높음</td></tr>
+      <tr><td>당뇨/혈당</td><td>FDG PET</td><td>제외 기준 또는 혈당 보정</td><td class="orange">높음</td></tr>
+      <tr><td>성별</td><td>글림패틱 성차</td><td>군간 비율 균형 + 공변량</td><td>중간</td></tr>
+      <tr><td>음주량</td><td>글림패틱 억제</td><td>AUDIT 설문 + 공변량</td><td>중간</td></tr>
+    </table>
+  </div>
+
+  <!-- Reviewer 대응 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--or);font-size:1.05rem">🥊 예상 Reviewer 비판 &amp; 방어 논리</div>
+    <div class="box info"><div class="box-t">비판 1 — "단면 연구이므로 인과관계가 없다"</div><p><strong>방어:</strong> 동의. 본 연구는 인과가 아닌 연관성과 기전적 가능성을 보고. 그러나: (1) 용량-반응 관계 (훈련 기간 길수록 효과 ↑), (2) 전체 사슬이 같은 방향으로 일관 → 우연으로 설명 어려움. (3) 본 연구는 향후 RCT를 위한 근거 생성 연구로 포지셔닝.</p></div>
+    <div class="box info"><div class="box-t">비판 2 — "Self-selection bias — 건강한 사람이 훈련을 선택한 것"</div><p><strong>방어:</strong> Propensity score matching (신체활동, BMI, 심혈관 건강), APOE 통제, 신체활동량 공변량. <strong>핵심 논거: 같은 집단 내에서 훈련 기간이 길수록 효과가 더 크다면 — 이것은 선택 편향만으로 설명 불가.</strong></p></div>
+    <div class="box info"><div class="box-t">비판 3 — "글림패틱 시스템의 기전이 아직 논쟁 중"</div><p><strong>방어:</strong> "글림패틱"을 기전 주장의 중심에 두지 않는다. "CSF 동역학 향상(PC-MRI)과 아밀로이드 감소(PET)의 연관성"을 보고하고, 글림패틱 시스템은 가장 파시모니적 설명 가설로 제시. 데이터는 기전 논쟁과 무관하게 robust.</p></div>
+    <div class="box info"><div class="box-t">비판 4 — "FDG PET은 글림패틱 기능 측정치가 아니다"</div><p><strong>방어:</strong> 정확히 맞다. FDG PET은 "글림패틱 기능 저하의 downstream consequence — 신경 대사 건강"의 지표로 프레이밍. 아밀로이드 축적 → 시냅스 손상 → 대사 저하 경로에서 뉴런 건강 통합 측정치로 기능.</p></div>
+  </div>
+
+  <!-- 최종 권고 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--gr);font-size:1.05rem">✅ 연구 설계 최종 권고</div>
+    <div class="box key"><div class="box-t">Primary Outcome</div><p><strong>Florbetaben PET Centiloid</strong> — 가장 새롭고 임상적으로 의미있는 outcome. 표본 크기 계산 기준.</p></div>
+    <div class="box info"><div class="box-t">핵심 통계 분석</div><ol style="padding-left:20px;margin:0;font-size:0.9rem"><li>ANCOVA (APOE, 연령, 신체활동, BMI 공변량)</li><li>Partial correlation: PC-MRI net flow ↔ Florbetaben SUVR</li><li>Mediation analysis: 훈련 → 수면지표 → 아밀로이드</li><li>Dose-response regression: 훈련 기간 × outcome</li><li>State vs. Trait decomposition: Session A·B·C contrast</li></ol></div>
+    <div class="box pu"><div class="box-t">Nat Commun 투고 Core Message</div><p style="font-size:0.95rem;font-weight:700;margin:0">"수십 년의 석문호흡 훈련은 60~79세에서 CSF 동역학 향상(PC-MRI), 뇌 아밀로이드 감소(Florbetaben PET), 포도당 대사 보존(FDG PET), 혈액 신경손상 마커 감소(NfL, GFAP)와 유의미하게 연관되며, 이 효과는 수면 질 개선에 의해 부분 매개된다 — 호흡 기반 비약리적 뇌 청소 강화의 첫 번째 임상 증거."</p></div>
+  </div>
+
+</div><!-- /panel 3 -->
+
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 4: EXPERIMENT             -->
+<!-- ══════════════════════════════ -->
+<div class="panel" id="p4">
+  <div class="sec">
+    <div class="sec-t" style="color:var(--te)">🔬 실험 설계 (Task 3 — 작업 중)</div>
+    <div class="box warn"><div class="box-t">현재 상태</div><p>Task 3 (실험 설계 최적화)은 Task 2 완료 후 착수 예정. 아래는 현재까지 도출된 핵심 설계 원칙이다.</p></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--te);font-size:1.05rem">⚙️ State vs. Trait 분리 — PC-MRI 3세션 프로토콜</div>
+    <table>
+      <tr><th>세션</th><th>조건</th><th>시간</th><th>측정 목적</th></tr>
+      <tr><td><strong>Session A</strong></td><td>자유 호흡 (지시 없음)</td><td>5분</td><td class="green">Trait 효과 — 군간 차이 = Trait</td></tr>
+      <tr><td><strong>Session B</strong></td><td>가이드 복식 심호흡</td><td>5분</td><td>State+Trait 합산 / 급성 효과</td></tr>
+      <tr><td><strong>Session C</strong></td><td>자유 호흡 (회복 후)</td><td>5분</td><td>Post-session 효과 / 재현성</td></tr>
+    </table>
+    <div class="box info"><div class="box-t">분석 공식</div>
+      <p>순수 <strong>Trait 효과</strong> = Session A 군간 차이</p>
+      <p>순수 <strong>State 효과</strong> = (Session B − Session A) 내 군간 차이</p>
+      <p style="margin:0">State + Trait 합산 = Session B 군간 차이</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--te);font-size:1.05rem">📋 전체 방문 프로토콜 (초안)</div>
+    <div class="proto-step"><div class="proto-n">1</div><div class="proto-b"><strong>사전 방문 — 스크리닝 &amp; 혈액 채취</strong>APOE 유전형, AUDIT, IPAQ, 혈당, 약물 목록, 기초 인지검사. mobiCARE 웨어러블 지급 시작 (7일 착용).</div></div>
+    <div class="proto-step"><div class="proto-n">2</div><div class="proto-b"><strong>Day 7~10 — PET 영상 (전날 저녁 mobiCARE 수거)</strong>FDG PET (금식 4~6시간, FDG 주사 후 30분 흡수, 20분 촬영). 동일 방문 또는 별도 방문 Florbetaben PET (90분 흡수, 20분 촬영).</div></div>
+    <div class="proto-step"><div class="proto-n">3</div><div class="proto-b"><strong>Day 10~14 — PC-MRI (실시간 velocity-encoding)</strong>Session A (자유 5분) → B (심호흡 5분) → 휴식 3분 → C (자유 5분). 동시에 호흡 벨트 + ECG 기록. 촬영 위치: 대공 + 측뇌실.</div></div>
+    <div class="proto-step"><div class="proto-n">4</div><div class="proto-b"><strong>신경인지 배터리 (동일 날 또는 별도)</strong>기억, 처리속도, 실행기능, 주의력. 한국형 표준화 배터리 사용.</div></div>
+    <div class="proto-step" style="border:none"><div class="proto-n">5</div><div class="proto-b"><strong>데이터 통합 분석</strong>모달리티 간 상관 분석, 매개 분석, 용량-반응 분석, ANCOVA.</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t" style="color:var(--te);font-size:1.05rem">⌚ mobiCARE 핵심 측정 변수 &amp; 예상 방향</div>
+    <table>
+      <tr><th>측정 변수</th><th>글림패틱 관련성</th><th>예상 방향</th></tr>
+      <tr><td>야간 RMSSD (부교감 활성)</td><td>수면 중 글림패틱 활성 지표</td><td class="green">훈련군 ↑</td></tr>
+      <tr><td>LF/HF 비율</td><td>교감/부교감 균형</td><td class="green">훈련군 ↓ (부교감 우위)</td></tr>
+      <tr><td>수면 중 호흡 속도 (회/분)</td><td>느릴수록 CSF 이동 ↑</td><td class="green">훈련군 ↓ (더 느림)</td></tr>
+      <tr><td>SWS 비율 (%)</td><td>글림패틱 최활성 수면 단계</td><td class="green">훈련군 ↑</td></tr>
+      <tr><td>수면 효율 (%)</td><td>수면 질 = 누적 글림패틱 효율</td><td class="green">훈련군 ↑</td></tr>
+      <tr><td>일중 HRV 주야 차이</td><td>자율신경 일주기 리듬</td><td class="green">훈련군에서 더 뚜렷</td></tr>
+    </table>
+  </div>
+</div><!-- /panel 4 -->
+
+
+<!-- ══════════════════════════════ -->
+<!-- TAB 5: MEETING                -->
+<!-- ══════════════════════════════ -->
+<div class="panel" id="p5">
+  <div class="sec">
+    <div class="sec-t" style="color:var(--ye)">📝 미팅 노트</div>
+    <p style="color:var(--tx2);font-size:0.9rem">연구 미팅 기록을 이곳에 저장하세요. 아래 양식을 복사해서 날짜별로 추가하면 됩니다.</p>
+  </div>
+
+  <!-- 미팅 템플릿 -->
+  <div class="sec">
+    <div class="sec-t" style="color:var(--ye);font-size:1rem">📋 미팅 템플릿</div>
+    <div class="meet-field"><div class="meet-label">날짜 / 참석자</div><textarea class="meet-input" rows="2" placeholder="예: 2026-06-05 | 채연, 지도교수"></textarea></div>
+    <div class="meet-field"><div class="meet-label">논의 사항</div><textarea class="meet-input" rows="4" placeholder="오늘 논의한 내용을 기록하세요..."></textarea></div>
+    <div class="meet-field"><div class="meet-label">지도교수 피드백 / 날카로운 지적</div><textarea class="meet-input" rows="4" placeholder="교수님 코멘트, 질문, 비판 사항..."></textarea></div>
+    <div class="meet-field"><div class="meet-label">결정 사항</div><textarea class="meet-input" rows="3" placeholder="확정된 방향, 합의 내용..."></textarea></div>
+    <div class="meet-field"><div class="meet-label">다음 Action Items</div><textarea class="meet-input" rows="3" placeholder="누가, 무엇을, 언제까지..."></textarea></div>
+    <button class="meet-btn" onclick="saveMeeting()">💾 미팅 저장</button>
+  </div>
+
+  <!-- 저장된 미팅 목록 -->
+  <div class="sec" id="meetings-list">
+    <div class="sec-t" style="color:var(--ye);font-size:1rem">📂 저장된 미팅 기록</div>
+    <p style="color:var(--tx2);font-size:0.88rem">아직 저장된 미팅이 없습니다. 위 양식을 작성하고 저장하세요.</p>
+  </div>
+</div><!-- /panel 5 -->
+
+
+</div><!-- /panels -->
+
+<div class="footer">
+  RSP_expert &nbsp;|&nbsp; 연구자: 채연 &nbsp;|&nbsp; 지도교수 AI 어드바이저 &nbsp;|&nbsp; GitHub Pages<br>
+  <span style="font-size:0.75rem">⚠️ 논문 정보는 PubMed 기반 (According to PubMed). 인용 시 원문 DOI 확인 필수.</span>
+</div>
+
+<script>
+// 탭 전환
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active', i===n);
+  });
+  document.querySelectorAll('.panel').forEach((p,i)=>{
+    p.classList.toggle('active', i===n);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// 미팅 저장 (localStorage)
+function saveMeeting(){
+  const ta = document.querySelectorAll('.meet-input');
+  const m = {
+    date: ta[0].value || '날짜 없음',
+    discussion: ta[1].value,
+    feedback: ta[2].value,
+    decision: ta[3].value,
+    actions: ta[4].value,
+    saved: new Date().toLocaleString('ko-KR')
+  };
+  if(!m.discussion && !m.feedback){ alert('논의 사항을 입력하세요.'); return; }
+  let meetings = JSON.parse(localStorage.getItem('rsp_meetings')||'[]');
+  meetings.unshift(m);
+  localStorage.setItem('rsp_meetings', JSON.stringify(meetings));
+  ta.forEach(t=>t.value='');
+  renderMeetings();
+  alert('✅ 미팅이 저장되었습니다.');
+}
+
+function renderMeetings(){
+  const meetings = JSON.parse(localStorage.getItem('rsp_meetings')||'[]');
+  const el = document.getElementById('meetings-list');
+  if(!meetings.length){
+    el.innerHTML='<div class="sec-t" style="color:var(--ye);font-size:1rem">📂 저장된 미팅 기록</div><p style="color:var(--tx2);font-size:0.88rem">아직 저장된 미팅이 없습니다.</p>';
+    return;
+  }
+  let html = '<div class="sec-t" style="color:var(--ye);font-size:1rem">📂 저장된 미팅 기록 ('+meetings.length+'건)</div>';
+  meetings.forEach((m,i)=>{
+    html+=`<div class="paper" style="margin-bottom:12px">
+      <div class="paper-t">${m.date}</div>
+      <div class="paper-m">저장: ${m.saved}</div>
+      ${m.discussion?'<p><strong>논의:</strong> '+m.discussion+'</p>':''}
+      ${m.feedback?'<p><strong>피드백:</strong> '+m.feedback+'</p>':''}
+      ${m.decision?'<p><strong>결정:</strong> '+m.decision+'</p>':''}
+      ${m.actions?'<p style="margin:0"><strong>Action:</strong> '+m.actions+'</p>':''}
+      <button onclick="deleteMeeting(${i})" style="margin-top:8px;background:rgba(224,92,92,.2);color:var(--rd);border:1px solid var(--rd);border-radius:6px;padding:4px 10px;font-size:0.78rem;cursor:pointer">삭제</button>
+    </div>`;
+  });
+  el.innerHTML=html;
+}
+
+function deleteMeeting(i){
+  if(!confirm('삭제하시겠습니까?')) return;
+  let meetings = JSON.parse(localStorage.getItem('rsp_meetings')||'[]');
+  meetings.splice(i,1);
+  localStorage.setItem('rsp_meetings', JSON.stringify(meetings));
+  renderMeetings();
+}
+
+// URL hash로 탭 복원
+(function(){
+  const h = location.hash;
+  const map={'#overview':0,'#theory':1,'#paper':2,'#gap':3,'#experiment':4,'#meeting':5};
+  if(map[h]!==undefined) switchTab(map[h]);
+  renderMeetings();
+})();
+</script>
+</body>
+</html>

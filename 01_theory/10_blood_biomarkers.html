@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>혈액 바이오마커 — NfL, GFAP | RSP_PET</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --accent:#e05c5c; --blue:#4f9cf9; --green:#3ecf8e; --orange:#f5a623; --text:#e8eaf0; --text2:#9ba3b8; --border:#2e3452; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; font-size:15px; line-height:1.75; }
+  .hero { background:linear-gradient(135deg,#b71c1c 0%,#880e4f 50%,#4a148c 100%); padding:50px 40px 40px; }
+  .hero h1 { font-size:2.1rem; font-weight:700; margin-bottom:8px; }
+  .hero p { color:rgba(255,255,255,0.75); max-width:700px; }
+  .badge { display:inline-block; background:rgba(224,92,92,0.2); border:1px solid var(--accent); color:var(--accent); border-radius:20px; padding:3px 12px; font-size:0.78rem; margin-bottom:16px; }
+  .nav-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; gap:20px; flex-wrap:wrap; }
+  .nav-bar a { color:var(--text2); text-decoration:none; font-size:0.85rem; }
+  .nav-bar a:hover { color:var(--accent); }
+  .nav-bar a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 24px; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:28px; }
+  .section-title { font-size:1.3rem; font-weight:700; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .highlight-box { background:rgba(224,92,92,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .key-box { background:rgba(62,207,142,0.08); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0; }
+  .card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .card h4 { color:var(--orange); font-size:0.95rem; margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .ref { font-size:0.78rem; color:var(--text2); margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+  .ref a { color:var(--blue); text-decoration:none; }
+  @media(max-width:768px) { .grid-2 { grid-template-columns:1fr; } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+<div class="hero">
+  <div class="badge">📚 이론 | Theory · 10</div>
+  <h1>🩸 혈액 바이오마커 — NfL, GFAP</h1>
+  <p>신경손상과 신경교세포 활성화의 혈액 기반 지표 — 개념, 임상 의미, 본 연구 활용</p>
+</div>
+<div class="nav-bar">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="02_csf_basics.html">② CSF</a>
+  <a href="03_respiration_csf_mechanism.html">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="07_sleep_glymphatic.html">⑦ 수면</a>
+  <a href="08_aqp4_astrocytes.html">⑧ AQP4</a>
+  <a href="09_brain_aging.html">⑨ 뇌 노화</a>
+  <a href="10_blood_biomarkers.html" class="active">⑩ 바이오마커</a>
+  <a href="11_autonomic_hrv.html">⑪ 자율신경</a>
+  <a href="../02_paper/paper_index.html">📄 논문</a>
+</div>
+<div class="container">
+
+  <div class="key-box"><strong>🎯 핵심 요약:</strong> NfL(신경섬유 경쇄)과 GFAP(신경교섬유 산성단백)은 혈액 단 한 번의 채혈로 뇌 내 신경손상 및 성상교세포 활성화를 민감하게 반영하는 바이오마커다. 글림패틱 기능이 저하되면 신경손상이 누적되어 이 마커들의 혈중 농도가 상승한다. 본 연구에서는 이 마커들이 PC-MRI(CSF 흐름), PET(대사·아밀로이드), 인지검사와 연결되는 다차원 연결망의 핵심 노드다.</div>
+
+  <!-- NfL -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🧬</span> 1. NfL (Neurofilament Light Chain, 신경섬유 경쇄)</div>
+    <div class="grid-2">
+      <div>
+        <p><strong>무엇인가?</strong></p>
+        <p>신경세포(뉴런) 축삭(axon)의 세포골격을 구성하는 단백질. 뉴런이 손상되거나 사멸할 때 세포에서 방출되어 CSF와 혈액으로 누출됨.</p>
+        <p style="margin-top:12px;"><strong>왜 중요한가?</strong></p>
+        <ul style="margin-top:8px; padding-left:20px; font-size:0.88rem;">
+          <li>신경손상의 <strong>민감하고 비특이적인</strong> 마커</li>
+          <li>알츠하이머병, 파킨슨병, ALS, MS 등 다양한 신경퇴행 질환에서 상승</li>
+          <li>건강한 노화에서도 나이와 함께 서서히 상승</li>
+          <li><strong>글림패틱 기능 저하 → 신경손상 축적 → NfL 상승</strong>의 연결 고리</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--accent);">
+        <h4 style="color:var(--accent);">NfL 정상 참고값 (혈장 기준)</h4>
+        <table style="margin:0; font-size:0.82rem;">
+          <tr><th>연령대</th><th>중앙값 (pg/mL)</th></tr>
+          <tr><td>40~49세</td><td>~8–10</td></tr>
+          <tr><td>50~59세</td><td>~10–13</td></tr>
+          <tr><td>60~69세</td><td>~13–18</td></tr>
+          <tr><td>70~79세</td><td>~18–25</td></tr>
+          <tr><td>AD 환자</td><td>&gt;30 (2~3배 상승)</td></tr>
+        </table>
+        <p style="font-size:0.8rem; color:var(--text2); margin-top:8px;">※ 측정 플랫폼(Simoa 등)에 따라 다를 수 있음. 연령 보정 필수.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- GFAP -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🕸️</span> 2. GFAP (Glial Fibrillary Acidic Protein, 신경교섬유 산성단백)</div>
+    <div class="grid-2">
+      <div>
+        <p><strong>무엇인가?</strong></p>
+        <p>성상교세포(astrocyte)의 중간섬유(intermediate filament) 구성 단백질. 성상교세포가 활성화(반응성 성상교세포증, reactive astrogliosis)되거나 손상될 때 혈액으로 누출됨.</p>
+        <p style="margin-top:12px;"><strong>왜 중요한가?</strong></p>
+        <ul style="margin-top:8px; padding-left:20px; font-size:0.88rem;">
+          <li>성상교세포 손상/활성화의 직접 지표</li>
+          <li>AQP4 수채널을 발현하는 성상교세포의 건강 상태 반영</li>
+          <li>알츠하이머병에서 매우 초기에 상승 (아밀로이드 PET 양성 시점과 유사)</li>
+          <li>NfL보다 AD 특이도 높음</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:var(--orange);">
+        <h4>GFAP 임상 의의</h4>
+        <ul style="padding-left:16px; font-size:0.88rem;">
+          <li>혈중 GFAP 상승 → 성상교세포 글림패틱 기능 장애의 간접 지표</li>
+          <li>글림패틱 시스템의 AQP4 구성요소인 성상교세포 손상을 반영</li>
+          <li>GFAP + NfL 조합 → 신경퇴행 위험도 분류에 최적</li>
+          <li>MCI → AD 전환 예측력: GFAP 단독으로 AUC ~0.80</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 측정 방법 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔬</span> 3. 측정 방법 — Simoa (Single Molecule Array)</div>
+    <p>혈액에서 NfL과 GFAP는 농도가 매우 낮아 (pg/mL 수준) 기존 ELISA로는 검출이 어렵다. <strong>Simoa(단일분자 배열 기술)</strong>가 이 문제를 해결했다.</p>
+    <div class="highlight-box">
+      <strong>Simoa 기술:</strong> 수십만 개의 미세 우물(microwell)에 단일 분자 단위의 항원-항체 반응을 실시하여 pg/mL 수준의 농도를 정확하게 측정. 기존 ELISA 대비 1000배 이상 민감도 향상. Quanterix社의 SR-X, HD-X 플랫폼이 표준.
+    </div>
+    <table>
+      <tr><th>측정 방법</th><th>민감도</th><th>검체</th><th>특징</th></tr>
+      <tr><td><strong>Simoa (HD-X, SR-X)</strong></td><td>fg/mL</td><td>혈장 (EDTA)</td><td>연구 및 임상 표준. 본 연구 권장</td></tr>
+      <tr><td>Lumipulse (FUJIREBIO)</td><td>pg/mL</td><td>혈청/혈장</td><td>자동화 임상 플랫폼</td></tr>
+      <tr><td>Elecsys (Roche)</td><td>pg/mL</td><td>혈청</td><td>임상 자동화 분석기</td></tr>
+    </table>
+  </div>
+
+  <!-- 본 연구에서의 활용 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🎯</span> 4. 본 연구(RSP_PET)에서의 혈액 바이오마커 활용 전략</div>
+    <table>
+      <tr><th>분석</th><th>방법</th><th>예상 결과 (가설)</th></tr>
+      <tr><td>군간 NfL 비교</td><td>Mann-Whitney U test (연령 공변량 보정)</td><td>석문호흡군에서 NfL 낮음</td></tr>
+      <tr><td>군간 GFAP 비교</td><td>동일</td><td>석문호흡군에서 GFAP 낮음</td></tr>
+      <tr><td>NfL ↔ Florbetaben SUVR</td><td>피어슨/스피어만 상관</td><td>아밀로이드 많을수록 NfL ↑</td></tr>
+      <tr><td>GFAP ↔ PC-MRI CSF 유량</td><td>피어슨/스피어만 상관</td><td>CSF 흐름 좋을수록 GFAP ↓</td></tr>
+      <tr><td>NfL + GFAP ↔ 인지</td><td>다변량 회귀</td><td>바이오마커 낮을수록 인지 점수 ↑</td></tr>
+    </table>
+    <div class="key-box"><strong>🎯 방어 논리:</strong> NfL과 GFAP는 글림패틱 기능(PC-MRI), 아밀로이드 축적(Florbetaben PET), 대사(FDG PET), 인지(인지검사) 모두와 이론적으로 연결된다. 이들 간의 상관 패턴이 군 간에 다르다면 → 호흡 훈련의 신경 보호 효과를 다차원적으로 지지하는 증거가 된다.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="icon">📑</span> 핵심 참고문헌</div>
+    <div class="ref">
+      <p>Based on articles retrieved from PubMed:</p><br>
+      <p>1. Simrén J, et al. <strong>Blood biomarkers for Alzheimer's disease and related disorders.</strong> <em>Acta Psychiatr Scand.</em> 2020 (NfL, GFAP 임상 리뷰)</p><br>
+      <p>2. Preische O, et al. <strong>Serum neurofilament dynamics predicts neurodegeneration and clinical progression in presymptomatic Alzheimer's disease.</strong> <em>Nat Med.</em> 2019;25(2):277-283. (NfL 예측 가치)</p><br>
+      <p>3. Benedet AL, et al. <strong>Differences Between Plasma and Cerebrospinal Fluid Glial Fibrillary Acidic Protein Levels Across the Alzheimer Disease Continuum.</strong> <em>JAMA Neurol.</em> 2021 (GFAP 임상 활용)</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

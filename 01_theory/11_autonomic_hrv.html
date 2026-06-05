@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자율신경계와 HRV | RSP_PET</title>
+<style>
+  :root { --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --accent:#4f9cf9; --green:#3ecf8e; --orange:#f5a623; --red:#e05c5c; --purple:#7c5cbf; --text:#e8eaf0; --text2:#9ba3b8; --border:#2e3452; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',sans-serif; font-size:15px; line-height:1.75; }
+  .hero { background:linear-gradient(135deg,#004d40 0%,#006064 50%,#01579b 100%); padding:50px 40px 40px; }
+  .hero h1 { font-size:2.1rem; font-weight:700; margin-bottom:8px; }
+  .hero p { color:rgba(255,255,255,0.75); max-width:700px; }
+  .badge { display:inline-block; background:rgba(79,156,249,0.2); border:1px solid var(--accent); color:var(--accent); border-radius:20px; padding:3px 12px; font-size:0.78rem; margin-bottom:16px; }
+  .nav-bar { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; gap:20px; flex-wrap:wrap; }
+  .nav-bar a { color:var(--text2); text-decoration:none; font-size:0.85rem; }
+  .nav-bar a:hover { color:var(--accent); }
+  .nav-bar a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 24px; }
+  .section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:32px; margin-bottom:28px; }
+  .section-title { font-size:1.3rem; font-weight:700; color:var(--accent); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .highlight-box { background:rgba(79,156,249,0.08); border-left:4px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .key-box { background:rgba(62,207,142,0.08); border-left:4px solid var(--green); border-radius:0 8px 8px 0; padding:16px 20px; margin:20px 0; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:20px 0; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin:20px 0; }
+  .card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .card h4 { color:var(--orange); font-size:0.95rem; margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent); padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid var(--border); }
+  .ref { font-size:0.78rem; color:var(--text2); margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+  .ref a { color:var(--accent); text-decoration:none; }
+  @media(max-width:768px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+</style>
+<link rel="stylesheet" href="../mobile.css">
+</head>
+<body>
+<div class="hero">
+  <div class="badge">📚 이론 | Theory · 11</div>
+  <h1>💗 자율신경계와 HRV — 호흡-심장-뇌 연결</html1>
+  <p>호흡 훈련이 자율신경 균형을 개선하고 뇌혈류·CSF 흐름에 미치는 영향</p>
+</div>
+<div class="nav-bar">
+  <a href="../index.html">🏠 연구 허브</a>
+  <a href="01_glymphatic_system.html">① 글림패틱</a>
+  <a href="02_csf_basics.html">② CSF</a>
+  <a href="03_respiration_csf_mechanism.html">③ 호흡-CSF</a>
+  <a href="04_pcmri.html">④ PC-MRI</a>
+  <a href="05_fdg_pet.html">⑤ FDG PET</a>
+  <a href="06_florbetaben_pet.html">⑥ Florbetaben PET</a>
+  <a href="07_sleep_glymphatic.html">⑦ 수면</a>
+  <a href="08_aqp4_astrocytes.html">⑧ AQP4</a>
+  <a href="09_brain_aging.html">⑨ 뇌 노화</a>
+  <a href="10_blood_biomarkers.html">⑩ 바이오마커</a>
+  <a href="11_autonomic_hrv.html" class="active">⑪ 자율신경</a>
+  <a href="../02_paper/paper_index.html">📄 논문</a>
+</div>
+<div class="container">
+
+  <div class="key-box"><strong>🎯 핵심 요약:</strong> 느린 복식호흡은 미주신경(vagus nerve)을 활성화하여 심박변이도(HRV)를 증가시키고 교감/부교감 신경의 균형을 개선한다. 이 자율신경 조절 효과는 뇌혈류 조절, CSF 동역학, 혈관운동(vasomotion)을 통해 글림패틱 기능에 직접 영향을 준다. mobiCARE의 HRV 측정이 이 연결 고리의 핵심 지표다.</div>
+
+  <!-- ANS 기초 -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⚡</span> 1. 자율신경계(ANS) 기초</div>
+    <div class="grid-2">
+      <div class="card" style="border-color:var(--red);">
+        <h4 style="color:var(--red);">교감신경 (Sympathetic)</h4>
+        <p>"싸움-도망(Fight or Flight)" 반응. 스트레스, 운동, 각성 시 활성. 심박수 ↑, 혈관 수축 ↑, 뇌혈류 조절 변화. 만성 과활성 → 혈관 경직, 글림패틱 저하.</p>
+      </div>
+      <div class="card" style="border-color:var(--green);">
+        <h4 style="color:var(--green);">부교감신경 (Parasympathetic)</h4>
+        <p>"휴식-소화(Rest and Digest)" 반응. 미주신경(CN X)이 주도. 심박수 ↓, 혈관 이완. 수면, 깊은 호흡 시 활성. 글림패틱 기능과 양의 상관관계.</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>💡 글림패틱과의 핵심 연결:</strong> 부교감신경(미주신경) 활성 시 → 심박수 감소, 호흡 느려짐 → 뇌 소동맥 vasomotion 활성화 → CSF 흐름 증가 → 글림패틱 효율 ↑. Lim et al. (2025)에서 확인한 "자율신경 경로(autonomic pathway)"가 바로 이 경로다.
+    </div>
+  </div>
+
+  <!-- HRV -->
+  <div class="section">
+    <div class="section-title"><span class="icon">📈</span> 2. 심박변이도 (HRV) — 자율신경의 정량적 지표</div>
+    <p>HRV는 연속된 심장 박동 간격(R-R 간격)의 변동성이다. 이 변동성이 클수록 자율신경 조절이 유연하고 건강하다는 것을 의미한다.</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h4>시간 영역 지표</h4>
+        <ul style="font-size:0.82rem; padding-left:16px;">
+          <li><strong>SDNN</strong>: R-R 간격 표준편차. 전반적 HRV.</li>
+          <li><strong>RMSSD</strong>: 연속 R-R 차이의 제곱평균. 부교감 지표.</li>
+          <li><strong>pNN50</strong>: 50ms 이상 차이 비율. 부교감 지표.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>주파수 영역 지표</h4>
+        <ul style="font-size:0.82rem; padding-left:16px;">
+          <li><strong>HF (0.15–0.4 Hz)</strong>: 고주파. 호흡 연동, 부교감 활성 직접 반영.</li>
+          <li><strong>LF (0.04–0.15 Hz)</strong>: 저주파. 교감+부교감 혼합.</li>
+          <li><strong>LF/HF 비율</strong>: 교감/부교감 균형 지수.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>석문호흡과 HRV</h4>
+        <ul style="font-size:0.82rem; padding-left:16px;">
+          <li>느린 복식호흡(6회/분) → HF 최대화</li>
+          <li>RMSSD, SDNN 증가 예상</li>
+          <li>LF/HF 비율 감소 (부교감 우위)</li>
+          <li>장기 훈련 → 안정 시 HRV 개선 (Trait 효과)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RSA와 CSF -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🔗</span> 3. 호흡성 동성부정맥(RSA)과 CSF 흐름의 연결</div>
+    <p><strong>RSA (Respiratory Sinus Arrhythmia)</strong>: 흡기 시 심박수 증가, 호기 시 감소하는 정상적 현상. 미주신경에 의해 매개되며 부교감 기능의 대표 지표.</p>
+    <div class="highlight-box">
+      <strong>연결 고리 (Lim et al. 2025 자율신경 경로):</strong><br>
+      느린 호흡 → RSA 심화 → 흡기 시 심박수 ↑ → 뇌동맥 박동 변화 → CSF 이동 패턴 변화. 이것이 "기계적 경로" 외에 자율신경 경로가 CSF 이동에 기여하는 방식이다.
+    </div>
+  </div>
+
+  <!-- mobiCARE -->
+  <div class="section">
+    <div class="section-title"><span class="icon">⌚</span> 4. mobiCARE 웨어러블 — 측정 지표와 분석 전략</div>
+    <table>
+      <tr><th>측정 지표</th><th>글림패틱 관련성</th><th>비교 방향 (예상)</th></tr>
+      <tr><td>야간 RMSSD (부교감 활성)</td><td>수면 중 글림패틱 활성화 지표</td><td>석문호흡군 ↑</td></tr>
+      <tr><td>LF/HF 비율</td><td>교감/부교감 균형</td><td>석문호흡군 ↓ (부교감 우위)</td></tr>
+      <tr><td>수면 중 호흡 속도 (회/분)</td><td>느릴수록 CSF 이동 ↑</td><td>석문호흡군 ↓ (느림)</td></tr>
+      <tr><td>SWS 비율 (%)</td><td>서파수면 = 글림패틱 최활성기</td><td>석문호흡군 ↑</td></tr>
+      <tr><td>수면 효율</td><td>수면 질 = 글림패틱 누적 효율</td><td>석문호흡군 ↑</td></tr>
+      <tr><td>일중 HRV 변화 (주간 vs 야간)</td><td>자율신경 일주기 리듬</td><td>석문호흡군에서 더 뚜렷한 주야 차이</td></tr>
+    </table>
+    <div class="key-box"><strong>🎯 핵심 분석:</strong> mobiCARE 지표(야간 RMSSD, 수면 중 호흡 속도, SWS 비율) ↔ PC-MRI CSF 유량 상관 분석. 이 상관이 유의미하다면 → "수면 중 자율신경 조절 → CSF 흐름 개선 → 글림패틱 활성"의 인과 사슬 전체를 하나의 연구 내에서 지지할 수 있는 강력한 증거가 된다.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="icon">📑</span> 핵심 참고문헌</div>
+    <div class="ref">
+      <p>Based on articles retrieved from PubMed:</p><br>
+      <p>1. Lim S, et al. <strong>Human cerebrospinal fluid net flow enhanced by respiration during the awake state.</strong> <em>Nat Commun.</em> 2025;16(1):11499. <a href="https://doi.org/10.1038/s41467-025-66548-4" target="_blank">DOI: 10.1038/s41467-025-66548-4</a> (자율신경 경로 규명)</p><br>
+      <p>2. Pagaduan JC, et al. <strong>Heart rate variability in slow-paced breathing: a meta-analysis.</strong> <em>Physiol Meas.</em> 2019. (느린 호흡과 HRV)</p><br>
+      <p>3. Rasmussen MK, Mestre H, Nedergaard M. <strong>Fluid transport in the brain.</strong> <em>Physiol Rev.</em> 2021;102(2):1025-1151. <a href="https://doi.org/10.1152/physrev.00031.2020" target="_blank">DOI: 10.1152/physrev.00031.2020</a> (vasomotion과 자율신경)</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
